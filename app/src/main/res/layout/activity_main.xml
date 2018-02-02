@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:context="com.szczepaniak.dawid.pixelapp.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="center">
+
+        <ImageView
+            android:id="@+id/BG"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@android:color/white" />
+
+        <com.szczepaniak.dawid.pixelapp.DrawView
+            android:id="@+id/Layout"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_alignStart="@+id/BG"
+            android:layout_alignTop="@+id/BG">
+
+        </com.szczepaniak.dawid.pixelapp.DrawView>
+
+        <ImageView
+            android:id="@+id/ZoomCircle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignEnd="@+id/BG"
+            android:layout_alignTop="@+id/BG"
+            android:layout_marginEnd="121dp"
+            android:layout_marginTop="61dp"
+            android:background="@mipmap/ic_launcher"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/Color"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@android:color/holo_green_dark" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
