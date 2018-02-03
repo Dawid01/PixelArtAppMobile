@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle("");
+
         dv = findViewById(R.id.Layout);
         dv.setContext(MainActivity.this);
         color = findViewById(R.id.Color);
@@ -116,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.Grid:
                 dv.showGrid = !dv.showGrid;
-                return true;
-            case R.id.Zoom:
-                dv.zoomTouch = !dv.zoomTouch;
                 return true;
             default:
                 return false;

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.support.design.widget.NavigationView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,9 +18,8 @@ import java.util.ArrayList;
  * Created by dawid on 30.01.2018.
  */
 
-public class DrawView extends View {
+public class DrawView extends View{
 
-        Paint pencil;
         private Bitmap mBitmap;
         private Canvas mCanvas;
         private Path mPath;
@@ -54,24 +54,8 @@ public class DrawView extends View {
             circlePaint.setStyle(Paint.Style.STROKE);
             circlePaint.setStrokeJoin(Paint.Join.MITER);
             circlePaint.setStrokeWidth(4f);
-
-
             Xpos = new ArrayList<>();
             Ypos = new ArrayList<>();
-            float rec =(getMeasuredHeight()/resolution);
-
-            int pixelCount = (int)(getMeasuredHeight()/rec);
-            float x = 0;
-            float y = 0;
-//            for(int i = 0; i < pixelCount; i++){
-//
-//                x+= rec/2f;
-//                y+= rec/2f;
-//                Xpos.add(x);
-//                Ypos.add(y);
-//            }
-
-
         }
 
         @Override
@@ -104,24 +88,13 @@ public class DrawView extends View {
         private float mX, mY;
 
         private void startTouch(float x, float y) {
-                 paint.setStrokeWidth(rec);
                 Draw(x, y);
-
         }
 
         private void moveTouch(float x, float y) {
 
-//            Paint paint = new Paint();
-//            paint.setColor(Color.GREEN);
-//            float rec =(mCanvas.getHeight()/resolution);
-//            paint.setStrokeWidth(rec);
-
-
                 Draw(x, y);
-
                 if(zoomTouch) {
-
-
                     circlePath.reset();
                     circlePath.addCircle(mX, mY - 100, 80, Path.Direction.CW);
                     circlePath.addCircle(mX, mY - 100, 2, Path.Direction.CW);
@@ -173,25 +146,16 @@ public class DrawView extends View {
             float y = 0;
             for (float i = 0; i < pixelCount; i++) {
 
-//                x += 17.5f;
-//                y += 17.5f;
-//                Xpos.add(x);
-//                Ypos.add(y);
-
                 if (i > 0) {
                     x += rec;
                     y += rec;
                     Xpos.add(x);
                     Ypos.add(y);
-
                 }else {
                     x = rec/2f;
                     y = rec/2f;
                     Xpos.add(x);
                     Ypos.add(y);
-//                    x = rec;
-//                    y = rec;
-
                 }
 
             }
@@ -205,34 +169,8 @@ public class DrawView extends View {
         RoundPos roundPos =  new RoundPos();
         float posX =  roundPos.roundPos(touchX,Xpos);
         float posY =  roundPos.roundPos(touchY,Ypos);
+        paint.setStrokeWidth(rec);
         mCanvas.drawPoint(posX,posY,paint);
-    }
-
-    void Draw2(float touchX, float touchY){
-
-        if(Xpos.size() == 0|| Ypos.size() == 0) {
-            rec = (mCanvas.getHeight()/ resolution);
-            float pixelCount = (mCanvas.getHeight()/ rec);
-            float x = 0;
-            float y = 0;
-            for (float i = 0; i < pixelCount; i++) {
-
-                    x += rec;
-                    y += rec;
-                    Xpos.add(x);
-                    Ypos.add(y);
-            }
-        }
-
-        mPath.reset();
-        mPath.moveTo(touchX, touchY);
-        tx = touchX;
-        ty = touchX;
-
-        RoundPos roundPos =  new RoundPos();
-        float posX =  roundPos.roundPos(touchX,Xpos);
-        float posY =  roundPos.roundPos(touchY,Ypos);
-        mCanvas.drawRect(tx,ty,rec,rec,paint);
     }
 
 
