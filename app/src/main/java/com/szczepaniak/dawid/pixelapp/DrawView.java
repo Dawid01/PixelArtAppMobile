@@ -27,7 +27,7 @@ public class DrawView extends View {
         Context context;
         private Paint circlePaint;
         private Path circlePath;
-        int resolution = 50;
+        float resolution =40f;
         private final Paint gridPaint = new Paint();
 
         boolean showGrid = true;
@@ -38,6 +38,7 @@ public class DrawView extends View {
         float tx,ty;
         ArrayList<Float> Xpos;
         ArrayList<Float> Ypos;
+        float rec;
 
     Paint paint = new Paint();
 
@@ -55,7 +56,6 @@ public class DrawView extends View {
             circlePaint.setStrokeWidth(4f);
 
 
-            paint.setColor(Color.GREEN);
             Xpos = new ArrayList<>();
             Ypos = new ArrayList<>();
             float rec =(getMeasuredHeight()/resolution);
@@ -63,13 +63,13 @@ public class DrawView extends View {
             int pixelCount = (int)(getMeasuredHeight()/rec);
             float x = 0;
             float y = 0;
-            for(int i = 0; i < pixelCount; i++){
-
-                x+= rec/2;
-                y+= rec/2;
-                Xpos.add(x);
-                Ypos.add(y);
-            }
+//            for(int i = 0; i < pixelCount; i++){
+//
+//                x+= rec/2f;
+//                y+= rec/2f;
+//                Xpos.add(x);
+//                Ypos.add(y);
+//            }
 
 
         }
@@ -77,26 +77,21 @@ public class DrawView extends View {
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
-            Matrix matrix = new Matrix();
-            matrix.setScale(10,10);
+
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
-            mCanvas.setDensity(1);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
 
-            canvas.setDensity(1);
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
-
-
 
             if (showGrid) {
                 int width = getMeasuredWidth();
                 int height = getMeasuredHeight();
-                for (int i = 1; i < resolution; i++) {
+                for (int i = 1; i <resolution; i++) {
                     canvas.drawLine(width * i / resolution, 0, width * i / resolution, height, gridPaint);
                 }
 
@@ -109,21 +104,21 @@ public class DrawView extends View {
         private float mX, mY;
 
         private void startTouch(float x, float y) {
-            if(!rubber) {
+                 paint.setStrokeWidth(rec);
                 Draw(x, y);
-            }
+
         }
 
         private void moveTouch(float x, float y) {
 
-            Paint paint = new Paint();
-            paint.setColor(Color.GREEN);
-            float rec =(mCanvas.getHeight()/resolution);
-            paint.setStrokeWidth(rec);
+//            Paint paint = new Paint();
+//            paint.setColor(Color.GREEN);
+//            float rec =(mCanvas.getHeight()/resolution);
+//            paint.setStrokeWidth(rec);
 
-            if(!rubber) {
+
                 Draw(x, y);
-            }
+
                 if(zoomTouch) {
 
 
@@ -170,45 +165,74 @@ public class DrawView extends View {
 
 
     void Draw(float touchX, float touchY){
-        float rec = (getMeasuredHeight() / resolution);
 
-       if(Xpos.size() == 0|| Ypos.size() == 0) {
-            int pixelCount = (int) (mCanvas.getHeight()/ rec);
+        if(Xpos.size() == 0|| Ypos.size() == 0) {
+            rec = 350f/resolution;
+            float pixelCount = 350f/ rec;
             float x = 0;
             float y = 0;
-            for (int i = 0; i < pixelCount; i++) {
+            for (float i = 0; i < pixelCount; i++) {
+
+//                x += 17.5f;
+//                y += 17.5f;
+//                Xpos.add(x);
+//                Ypos.add(y);
 
                 if (i > 0) {
                     x += rec;
                     y += rec;
                     Xpos.add(x);
                     Ypos.add(y);
+
                 }else {
-                    x += rec/2;
-                    y += rec/2;
+                    x = rec/2f;
+                    y = rec/2f;
                     Xpos.add(x);
                     Ypos.add(y);
-                    x = rec;
-                    y = rec;
+//                    x = rec;
+//                    y = rec;
+
                 }
 
             }
-       }
+        }
 
         mPath.reset();
         mPath.moveTo(touchX, touchY);
         tx = touchX;
         ty = touchX;
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-
-        paint.setStrokeWidth(rec);
-
 
         RoundPos roundPos =  new RoundPos();
         float posX =  roundPos.roundPos(touchX,Xpos);
         float posY =  roundPos.roundPos(touchY,Ypos);
         mCanvas.drawPoint(posX,posY,paint);
+    }
+
+    void Draw2(float touchX, float touchY){
+
+        if(Xpos.size() == 0|| Ypos.size() == 0) {
+            rec = (mCanvas.getHeight()/ resolution);
+            float pixelCount = (mCanvas.getHeight()/ rec);
+            float x = 0;
+            float y = 0;
+            for (float i = 0; i < pixelCount; i++) {
+
+                    x += rec;
+                    y += rec;
+                    Xpos.add(x);
+                    Ypos.add(y);
+            }
+        }
+
+        mPath.reset();
+        mPath.moveTo(touchX, touchY);
+        tx = touchX;
+        ty = touchX;
+
+        RoundPos roundPos =  new RoundPos();
+        float posX =  roundPos.roundPos(touchX,Xpos);
+        float posY =  roundPos.roundPos(touchY,Ypos);
+        mCanvas.drawRect(tx,ty,rec,rec,paint);
     }
 
 

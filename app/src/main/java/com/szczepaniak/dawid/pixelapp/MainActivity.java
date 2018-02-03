@@ -9,11 +9,13 @@ import android.graphics.Path;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -39,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         color.setBackgroundColor(Color.GREEN);
         zoomCircle = findViewById(R.id.ZoomCircle);
 
-
+        dv.paint.setColor(Color.GREEN);
+        dv.paint.setStrokeWidth(dv.rec);
 
         dv.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -105,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.Draw:
                 dv.draw = true;
-                dv.pencil.setColor(Color.GREEN);
+                dv.paint.setColor(Color.GREEN);
                 return true;
             case R.id.Rubber:
-                dv.draw = true;
-                dv.pencil.setColor(Color.TRANSPARENT);
+                dv.draw = false;
+                dv.paint.setColor(Color.TRANSPARENT);
                 return true;
             case R.id.Grid:
                 dv.showGrid = !dv.showGrid;
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
         }
     }
+
 
 
     Canvas getZoomCnvas(int x, int y){
