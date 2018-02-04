@@ -8,8 +8,8 @@
     tools:context="com.szczepaniak.dawid.pixelapp.MainActivity">
 
 
-
     <RelativeLayout
+        android:id="@+id/AppLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foregroundGravity="center">
@@ -20,7 +20,15 @@
             android:layout_height="350dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@android:color/white" />
+            app:srcCompat="@android:color/background_light" />
+
+        <ImageView
+            android:id="@+id/BG2"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@android:color/background_light" />
 
         <com.szczepaniak.dawid.pixelapp.DrawView
             android:id="@+id/Layout"

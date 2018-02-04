@@ -8,8 +8,8 @@
         android:icon="@mipmap/drawikon"
         app:showAsAction="always" />
     <item
+        android:id="@+id/Palette"
         android:icon="@mipmap/paleteikon"
-        android:title="Palette"
         app:showAsAction="always" />
     <item
         android:id="@+id/Rubber"

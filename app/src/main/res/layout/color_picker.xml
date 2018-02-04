@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/ColorImage"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@android:color/holo_red_dark" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/ColorText"
+            android:layout_alignBottom="@+id/ColorText"
+            android:layout_centerHorizontal="true"
+            android:text="A"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.szczepaniak.dawid.pixelapp.ColorBar
+            android:id="@+id/colorBar"
+            android:layout_width="50dp"
+            android:layout_height="210dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/ColorGradient"
+            android:layout_marginRight="10dp" />
+
+        <com.szczepaniak.dawid.pixelapp.ColorGradient
+            android:id="@+id/ColorGradient"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_alignStart="@+id/scrollView3"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="13dp" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="@android:style/Widget.Material.Light.SeekBar"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/colorBar"
+            android:layout_marginTop="11dp"
+            android:layout_toEndOf="@+id/Alpha"
+            android:layout_weight="1"
+            android:max="255"
+            android:paddingTop="5dp"
+            android:progress="255" />
+
+        <TextView
+            android:id="@+id/Alpha"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/seekBar"
+            android:paddingTop="5dp"
+            android:text="A"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="21dp"
+            android:layout_toStartOf="@+id/seekBar"
+            android:text="#"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:id="@+id/scrollView3"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+            <GridLayout
+                android:id="@+id/Colors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </GridLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/AlphaText"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView2"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_toEndOf="@+id/textView3"
+            android:background="@color/colorAccent"
+            android:paddingTop="5dp"
+            android:text="0%"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ColorText"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView2"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_toEndOf="@+id/textView2"
+            android:background="@color/colorAccent"
+            android:paddingTop="5dp"
+            android:text="ff0000"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/scrollView3"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:srcCompat="@color/colorAccent" />
+
+    </RelativeLayout>
+</RelativeLayout>

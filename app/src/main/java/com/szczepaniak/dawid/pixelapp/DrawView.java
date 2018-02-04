@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.support.design.widget.NavigationView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 public class DrawView extends View{
 
         private Bitmap mBitmap;
-        private Canvas mCanvas;
+        Canvas mCanvas;
         private Path mPath;
         private Paint mBitmapPaint;
         Context context;
@@ -69,7 +68,6 @@ public class DrawView extends View{
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
 
             if (showGrid) {
@@ -173,5 +171,20 @@ public class DrawView extends View{
         mCanvas.drawPoint(posX,posY,paint);
     }
 
+    void resetCanvas(){
 
+        mCanvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
+
+        if (showGrid) {
+            int width = getMeasuredWidth();
+            int height = getMeasuredHeight();
+            for (int i = 1; i <resolution; i++) {
+                mCanvas.drawLine(width * i / resolution, 0, width * i / resolution, height, gridPaint);
+            }
+
+            for (int i = 1; i < resolution; i++) {
+                mCanvas.drawLine(0, height * i / resolution, width, height * i / resolution, gridPaint);
+            }
+        }
+    }
 }

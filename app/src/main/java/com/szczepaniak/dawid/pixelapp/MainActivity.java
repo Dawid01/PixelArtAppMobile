@@ -7,9 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import java.util.zip.Inflater;
@@ -114,10 +117,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.Rubber:
                 dv.draw = false;
-                dv.paint.setColor(Color.TRANSPARENT);
+                dv.paint.setColor(Color.WHITE);
                 return true;
             case R.id.Grid:
                 dv.showGrid = !dv.showGrid;
+//                dv.onDraw(dv.mCanvas);
+                return true;
+            case R.id.Palette:
+                colorPickerFunctions();
                 return true;
             default:
                 return false;
@@ -138,4 +145,67 @@ public class MainActivity extends AppCompatActivity {
         return  canvas;
     }
 
+    void colorPickerFunctions() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        View colorPicker = getLayoutInflater().inflate(R.layout.color_picker, null);
+
+        final ColorBar colorBar = colorPicker.findViewById(R.id.colorBar);
+        final ColorGradient colorGradient = colorPicker.findViewById(R.id.ColorGradient);
+        final ImageView imageColor = colorPicker.findViewById(R.id.ColorImage);
+        colorBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        int y = (int)event.getY();
+                        int x = (int)event.getX();
+                        colorBar.setDrawingCacheEnabled(true);
+                        Bitmap bitmap = colorBar.getDrawingCache();
+                        int pixel = bitmap.getPixel(x,y);
+                        int r = Color.red(pixel);
+                        int g = Color.blue(pixel);
+                        int b = Color.green(pixel);
+                        int color = Color.rgb(r,g,b);
+                        colorGradient.drawGradnient(colorGradient.getNewCanvas(), Color.BLUE);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        colorGradient.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        int y = (int)event.getY();
+                        int x = (int)event.getX();
+                        colorGradient.setDrawingCacheEnabled(true);
+                        Bitmap bitmap = colorGradient.getBitmap();
+                        int pixel = bitmap.getPixel(x,y);
+                        int r = Color.red(pixel);
+                        int g = Color.blue(pixel);
+                        int b = Color.green(pixel);
+                        int color = Color.rgb(r,g,b);
+                        imageColor.setBackgroundColor(color);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        mBuilder.setView(colorPicker);
+        final AlertDialog colorPickerDialog = mBuilder.create();
+
+
+
+        colorPickerDialog.show();
+    }
 }
