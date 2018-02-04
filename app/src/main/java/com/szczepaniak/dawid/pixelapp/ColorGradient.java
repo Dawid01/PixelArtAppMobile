@@ -28,6 +28,9 @@ public class ColorGradient extends View {
     private float mX, mY;
     int color;
     Bitmap gradientPaletteBtm;
+    int loop = 0;
+    float tx,ty;
+    int gradientColor;
 
     public ColorGradient(Context context, AttributeSet attrs) {
         super(context,attrs);
@@ -39,6 +42,7 @@ public class ColorGradient extends View {
         circlePaint.setStyle(Paint.Style.STROKE);
         circlePaint.setStrokeJoin(Paint.Join.MITER);
         circlePaint.setStrokeWidth(3f);
+        gradientColor = Color.RED;
     }
 
     @Override
@@ -49,25 +53,21 @@ public class ColorGradient extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int i = 0;
-        if(i == 0) {
-            drawGradnient(canvas,Color.rgb(153, 0, 153));
-        }
-        i++;
+        drawGradnient(canvas,gradientColor);
         canvas.drawPath(circlePath,circlePaint);
         newCanvas = canvas;
 
     }
 
 
-    void drawGradnient(Canvas canvas, int Color){
+    void drawGradnient(Canvas canvas, int gradientColor){
 
         //canvas.drawColor(android.graphics.Color.BLACK);
         bitmap = Bitmap.createBitmap(210, 210, Bitmap.Config.ALPHA_8);
         paint.setColor(android.graphics.Color.BLUE);
 
         Shader mShader = new LinearGradient(0, 0, 210, 0, new int[] {
-                android.graphics.Color.WHITE,Color},
+                android.graphics.Color.WHITE,gradientColor},
                 null, Shader.TileMode.REPEAT);
 
         //new float[]{0,0.5f,.55f,1}
@@ -75,7 +75,7 @@ public class ColorGradient extends View {
         paint.setShader(mShader);
         //c.drawCircle(60, 60, 30, paint);
         c.drawRect(0, 0, 210, 210, paint);
-        canvas.drawBitmap(bitmap, 10,10, paint);
+        canvas.drawBitmap(bitmap, 0,0, paint);
         this.setDrawingCacheEnabled(true);
         this.buildDrawingCache();
         gradientPaletteBtm = this.getDrawingCache();
@@ -127,15 +127,31 @@ public class ColorGradient extends View {
     private void moveTouch(float x, float y) {
         try{
             circlePath.reset();
-            circlePath.addCircle(x, y, 3, Path.Direction.CW);
+            //circlePath.addCircle(x, y, 3, Path.Direction.CW);
             int pixel = gradientPaletteBtm.getPixel((int) x,(int) y);
             int r = Color.red(pixel);
             int g = Color.green(pixel);
             int b = Color.blue(pixel);
             color = Color.rgb(r,g,b);
+            tx = x;
+            ty = y;
         }catch (Exception e){}
     }
 
     private void upTouch() {
+
+        circlePath.addCircle(tx, ty, 3, Path.Direction.CW);
+    }
+
+    void getColorBar(){
+        int pixel = gradientPaletteBtm.getPixel((int) tx,(int)ty);
+        int r = Color.red(pixel);
+        int g = Color.green(pixel);
+        int b = Color.blue(pixel);
+        color = Color.rgb(r,g,b);
+    }
+
+    void refreshCanvas(){
+        drawGradnient(newCanvas, color);
     }
 }

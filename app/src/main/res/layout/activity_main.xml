@@ -23,12 +23,12 @@
             app:srcCompat="@android:color/background_light" />
 
         <ImageView
-            android:id="@+id/BG2"
+            android:id="@+id/AlphaBG"
             android:layout_width="350dp"
             android:layout_height="350dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@android:color/background_light" />
+            app:srcCompat="@mipmap/alphabg" />
 
         <com.szczepaniak.dawid.pixelapp.DrawView
             android:id="@+id/Layout"
