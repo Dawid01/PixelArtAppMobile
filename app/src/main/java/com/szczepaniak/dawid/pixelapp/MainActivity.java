@@ -22,7 +22,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
+import java.io.EOFException;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     DrawView dv ;
     private Paint mPaint;
     View plane;
-    ImageView color;
+    ImageView colorIMG;
     ImageView zoomCircle;
     Canvas zoomCnvas;
     @Override
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         dv = findViewById(R.id.Layout);
         dv.setContext(MainActivity.this);
-        color = findViewById(R.id.Color);
-        color.setBackgroundColor(Color.GREEN);
+        colorIMG = findViewById(R.id.Color);
+        colorIMG.setBackgroundColor(Color.GREEN);
         zoomCircle = findViewById(R.id.ZoomCircle);
 
         dv.paint.setColor(Color.GREEN);
@@ -153,21 +156,51 @@ public class MainActivity extends AppCompatActivity {
         final ColorBar colorBar = colorPicker.findViewById(R.id.colorBar);
         final ColorGradient colorGradient = colorPicker.findViewById(R.id.ColorGradient);
         final ImageView imageColor = colorPicker.findViewById(R.id.ColorImage);
+        imageColor.setBackgroundColor(Color.GREEN);
+        final TextView alphaText = colorPicker.findViewById(R.id.AlphaText);
+        final SeekBar seekBarAlpha = colorPicker.findViewById(R.id.seekBarAlpha);
+       // colorGradient.drawGradnient(colorGradient.getNewCanvas(),Color.GREEN);
+
+        alphaText.setText("" +  ((255-seekBarAlpha.getProgress()) *100/255) + "%");
+
+        seekBarAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                alphaText.setText("" +  ((255-seekBarAlpha.getProgress()) *100/255) + "%");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        colorGradient.setDrawingCacheEnabled(true);
         colorBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        int y = (int)event.getY();
-                        int x = (int)event.getX();
                         colorBar.setDrawingCacheEnabled(true);
+                        colorBar.buildDrawingCache();
                         Bitmap bitmap = colorBar.getDrawingCache();
+                        int x = (int)event.getX();
+                        int y = (int)event.getY();
                         int pixel = bitmap.getPixel(x,y);
                         int r = Color.red(pixel);
-                        int g = Color.blue(pixel);
-                        int b = Color.green(pixel);
+                        int g = Color.green(pixel);
+                        int b = Color.blue(pixel);
                         int color = Color.rgb(r,g,b);
-                        colorGradient.drawGradnient(colorGradient.getNewCanvas(), Color.BLUE);
+                        colorGradient.drawGradnient(colorGradient.getNewCanvas(),color);
+                        imageColor.setBackgroundColor(color);
+                        dv.paint.setColor(color);
+                        colorIMG.setBackgroundColor(color);
+
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
@@ -180,20 +213,26 @@ public class MainActivity extends AppCompatActivity {
         colorGradient.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                colorGradient.setDrawingCacheEnabled(true);
+                colorGradient.buildDrawingCache();
+                final Bitmap gradientPaletteBtm = colorGradient.getDrawingCache();
+
+
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        int y = (int)event.getY();
-                        int x = (int)event.getX();
-                        colorGradient.setDrawingCacheEnabled(true);
-                        Bitmap bitmap = colorGradient.getBitmap();
-                        int pixel = bitmap.getPixel(x,y);
-                        int r = Color.red(pixel);
-                        int g = Color.blue(pixel);
-                        int b = Color.green(pixel);
-                        int color = Color.rgb(r,g,b);
-                        imageColor.setBackgroundColor(color);
+                        imageColor.setBackgroundColor(colorGradient.color);
+                        colorIMG.setBackgroundColor(colorGradient.color);
+
                         break;
                     case MotionEvent.ACTION_MOVE:
+                        try {
+                            imageColor.setBackgroundColor(colorGradient.color);
+                            dv.paint.setColor(colorGradient.color);
+                            colorIMG.setBackgroundColor(colorGradient.color);
+                        }catch (Exception e){
+
+                        }
+
                         break;
                 }
 

@@ -28,6 +28,7 @@ public class DrawView extends View{
         private Path circlePath;
         float resolution =40f;
         private final Paint gridPaint = new Paint();
+        int mColor = Color.GREEN;
 
         boolean showGrid = true;
         boolean draw = true;

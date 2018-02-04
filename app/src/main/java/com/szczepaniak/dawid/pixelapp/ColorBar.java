@@ -6,8 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -18,9 +20,17 @@ public class ColorBar extends View {
 
     Paint paint =  new Paint();
     Bitmap bitmap;
-
+    private Paint linePaint;
+    private Path linePath;
     public ColorBar(Context context,AttributeSet attrs) {
         super(context,attrs);
+        linePaint = new Paint();
+        linePath = new Path();
+        linePaint.setAntiAlias(true);
+        linePaint.setColor(Color.DKGRAY);
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setStrokeJoin(Paint.Join.MITER);
+        linePaint.setStrokeWidth(3f);
     }
 
     @Override
@@ -32,7 +42,8 @@ public class ColorBar extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8);
+
+        bitmap = Bitmap.createBitmap(200, 210, Bitmap.Config.ALPHA_8);
         paint.setColor(android.graphics.Color.BLUE);
 
         Shader mShader = new LinearGradient(0, 0, 0, 200, new int[] {
@@ -43,11 +54,54 @@ public class ColorBar extends View {
         paint.setShader(mShader);
         //c.drawCircle(60, 60, 30, paint);
         c.drawRect(0, 0, 200, 200, paint);
-        canvas.drawBitmap(bitmap, 10,10, paint);
+        canvas.drawBitmap(bitmap, 10,0, paint);
+        canvas.drawPath(linePath,linePaint);
+
     }
 
     public Bitmap getBitmap() {
         return bitmap;
     }
 
+
+    private void startTouch(float x, float y) {
+        linePath.reset();
+       // linePath.addRect(0, y, 50,2, Path.Direction.CW);
+        linePath.addCircle(30, y, 3, Path.Direction.CW);
+
+    }
+
+    private void moveTouch(float x, float y) {
+        linePath.reset();
+        linePath.addCircle(30, y, 3, Path.Direction.CW);
+        //linePath.addRect(0, y, 50,2, Path.Direction.CW);
+
+
+
+    }
+
+    private void upTouch() {
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startTouch(x, y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                moveTouch(x, y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                upTouch();
+                invalidate();
+                break;
+        }
+        return true;
+    }
 }

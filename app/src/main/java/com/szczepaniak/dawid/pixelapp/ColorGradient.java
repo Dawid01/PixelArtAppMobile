@@ -6,10 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -21,9 +23,22 @@ public class ColorGradient extends View {
     Paint paint =  new Paint();
     Canvas newCanvas;
     Bitmap bitmap;
+    private Paint circlePaint;
+    private Path circlePath;
+    private float mX, mY;
+    int color;
+    Bitmap gradientPaletteBtm;
+
     public ColorGradient(Context context, AttributeSet attrs) {
         super(context,attrs);
 
+        circlePaint = new Paint();
+        circlePath = new Path();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(Color.DKGRAY);
+        circlePaint.setStyle(Paint.Style.STROKE);
+        circlePaint.setStrokeJoin(Paint.Join.MITER);
+        circlePaint.setStrokeWidth(3f);
     }
 
     @Override
@@ -36,9 +51,10 @@ public class ColorGradient extends View {
         super.onDraw(canvas);
         int i = 0;
         if(i == 0) {
-            drawGradnient(canvas, Color.BLUE);
+            drawGradnient(canvas,Color.rgb(153, 0, 153));
         }
         i++;
+        canvas.drawPath(circlePath,circlePaint);
         newCanvas = canvas;
 
     }
@@ -47,18 +63,22 @@ public class ColorGradient extends View {
     void drawGradnient(Canvas canvas, int Color){
 
         //canvas.drawColor(android.graphics.Color.BLACK);
-        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8);
+        bitmap = Bitmap.createBitmap(210, 210, Bitmap.Config.ALPHA_8);
         paint.setColor(android.graphics.Color.BLUE);
 
         Shader mShader = new LinearGradient(0, 0, 210, 0, new int[] {
                 android.graphics.Color.WHITE,Color},
                 null, Shader.TileMode.REPEAT);
+
         //new float[]{0,0.5f,.55f,1}
         Canvas c = new Canvas(bitmap);
         paint.setShader(mShader);
         //c.drawCircle(60, 60, 30, paint);
         c.drawRect(0, 0, 210, 210, paint);
         canvas.drawBitmap(bitmap, 10,10, paint);
+        this.setDrawingCacheEnabled(true);
+        this.buildDrawingCache();
+        gradientPaletteBtm = this.getDrawingCache();
     }
 
     public Canvas getNewCanvas() {
@@ -69,4 +89,53 @@ public class ColorGradient extends View {
         return bitmap;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startTouch(x, y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                moveTouch(x, y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                upTouch();
+                invalidate();
+                break;
+        }
+        return true;
+    }
+
+    private void startTouch(float x, float y) {
+        try {
+            circlePath.reset();
+            circlePath.reset();
+            circlePath.addCircle(x, y, 3, Path.Direction.CW);
+            int pixel = gradientPaletteBtm.getPixel((int) x, (int) y);
+            int r = Color.red(pixel);
+            int g = Color.green(pixel);
+            int b = Color.blue(pixel);
+            color = Color.rgb(r, g, b);
+        }catch (Exception e){}
+    }
+
+    private void moveTouch(float x, float y) {
+        try{
+            circlePath.reset();
+            circlePath.addCircle(x, y, 3, Path.Direction.CW);
+            int pixel = gradientPaletteBtm.getPixel((int) x,(int) y);
+            int r = Color.red(pixel);
+            int g = Color.green(pixel);
+            int b = Color.blue(pixel);
+            color = Color.rgb(r,g,b);
+        }catch (Exception e){}
+    }
+
+    private void upTouch() {
+    }
 }
