@@ -49,18 +49,17 @@ public class ColorBar extends View {
         super.onDraw(canvas);
 
         if(loop > -1) {
-            bitmap = Bitmap.createBitmap(200, 210, Bitmap.Config.ALPHA_8);
+            bitmap = Bitmap.createBitmap(50, 210, Bitmap.Config.ALPHA_8);
             paint.setColor(android.graphics.Color.BLUE);
 
-            Shader mShader = new LinearGradient(0, 0, 0, 200, new int[]{
+            Shader mShader = new LinearGradient(0, 0, 0, 210, new int[]{
                     0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00,
                     0xFFFFFF00, 0xFFFF0000},
                     null, Shader.TileMode.REPEAT);
             Canvas c = new Canvas(bitmap);
             paint.setShader(mShader);
-            //c.drawCircle(60, 60, 30, paint);
-            c.drawRect(0, 0, 200, 200, paint);
-            canvas.drawBitmap(bitmap, 10, 0, paint);
+            c.drawRect(0, 0, 200, 210, paint);
+            canvas.drawBitmap(bitmap, 0, 0, paint);
             canvas.drawPath(linePath, linePaint);
             this.setDrawingCacheEnabled(true);
             this.buildDrawingCache();
@@ -69,15 +68,10 @@ public class ColorBar extends View {
         loop++;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
 
     private void startTouch(float x, float y) {
         try {
             linePath.reset();
-           // linePath.addRect(0, y, 50,2, Path.Direction.CW);
             linePath.addCircle(x, y, 3, Path.Direction.CW);
             int pixel = colorBarBtm.getPixel((int) x, (int) y);
             int r = Color.red(pixel);
@@ -90,8 +84,6 @@ public class ColorBar extends View {
     private void moveTouch(float x, float y) {
         try {
             linePath.reset();
-            //linePath.addCircle(x, y, 3, Path.Direction.CW);
-            //linePath.addRect(0, y, 50,2, Path.Direction.CW);
             int pixel = colorBarBtm.getPixel((int) x, (int) y);
             int r = Color.red(pixel);
             int g = Color.green(pixel);

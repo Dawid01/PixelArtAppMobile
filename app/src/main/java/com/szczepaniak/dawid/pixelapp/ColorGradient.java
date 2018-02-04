@@ -4,12 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ComposeShader;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -62,18 +65,20 @@ public class ColorGradient extends View {
 
     void drawGradnient(Canvas canvas, int gradientColor){
 
+
         //canvas.drawColor(android.graphics.Color.BLACK);
         bitmap = Bitmap.createBitmap(210, 210, Bitmap.Config.ALPHA_8);
         paint.setColor(android.graphics.Color.BLUE);
 
         Shader mShader = new LinearGradient(0, 0, 210, 0, new int[] {
-                android.graphics.Color.WHITE,gradientColor},
-                null, Shader.TileMode.REPEAT);
-
-        //new float[]{0,0.5f,.55f,1}
+                android.graphics.Color.WHITE,gradientColor, Color.BLACK},
+                null, Shader.TileMode.CLAMP);
+        Shader mShader2 = new LinearGradient(0, 0, 0, 210, new int[] {
+                Color.TRANSPARENT, Color.BLACK},
+                null, Shader.TileMode.CLAMP);
+        Shader shaderMulti = new ComposeShader(mShader2, mShader, PorterDuff.Mode.OVERLAY);
         Canvas c = new Canvas(bitmap);
-        paint.setShader(mShader);
-        //c.drawCircle(60, 60, 30, paint);
+        paint.setShader(shaderMulti);
         c.drawRect(0, 0, 210, 210, paint);
         canvas.drawBitmap(bitmap, 0,0, paint);
         this.setDrawingCacheEnabled(true);
@@ -81,13 +86,6 @@ public class ColorGradient extends View {
         gradientPaletteBtm = this.getDrawingCache();
     }
 
-    public Canvas getNewCanvas() {
-        return newCanvas;
-    }
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
