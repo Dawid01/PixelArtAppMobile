@@ -54,10 +54,8 @@
             style="@android:style/Widget.Material.Light.SeekBar"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/OK"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/colorBar"
-            android:layout_marginTop="11dp"
-            android:layout_toEndOf="@+id/Alpha"
             android:layout_weight="1"
             android:max="255"
             android:paddingTop="5dp"
@@ -69,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignTop="@+id/seekBarAlpha"
-            android:paddingTop="5dp"
+            android:paddingTop="10dp"
             android:text="A"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
@@ -99,7 +97,9 @@
             <GridLayout
                 android:id="@+id/Colors"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="150dp"
+                android:columnCount="6"
+                android:paddingTop="5dp">
 
             </GridLayout>
         </ScrollView>
@@ -161,6 +161,37 @@
             android:layout_alignTop="@+id/colorBar"
             android:visibility="gone"
             app:srcCompat="@android:color/white" />
+
+        <Button
+            android:id="@+id/OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_toEndOf="@+id/textView3"
+            android:backgroundTint="@color/colorAccent"
+            android:text="OK"
+            android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/OK"
+            android:layout_toStartOf="@+id/OK"
+            android:backgroundTint="@color/colorAccent"
+            android:text="BACK"
+            android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/Save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/Back"
+            android:layout_alignBottom="@+id/Back"
+            android:layout_toStartOf="@+id/Back"
+            android:backgroundTint="@color/colorAccent"
+            android:text="SAVE"
+            android:textColor="@android:color/background_light" />
 
     </RelativeLayout>
 </RelativeLayout>
