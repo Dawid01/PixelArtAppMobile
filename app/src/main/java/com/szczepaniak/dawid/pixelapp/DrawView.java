@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class DrawView extends View{
 
-        private Bitmap mBitmap;
+        Bitmap mBitmap;
         Canvas mCanvas;
         private Path mPath;
         private Paint mBitmapPaint;
@@ -124,6 +124,14 @@ public class DrawView extends View{
                     break;
                 case MotionEvent.ACTION_UP:
                     upTouch();
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_HOVER_ENTER:
+                    moveTouch(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_HOVER_MOVE:
+                    moveTouch(x, y);
                     invalidate();
                     break;
             }

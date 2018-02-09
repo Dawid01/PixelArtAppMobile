@@ -21,7 +21,7 @@ import android.view.View;
  * Created by dawid on 03.02.2018.
  */
 
-public class ColorGradient extends View {
+public class ColorGradient extends View implements Runnable {
 
     Paint paint =  new Paint();
     Canvas newCanvas;
@@ -46,6 +46,27 @@ public class ColorGradient extends View {
         circlePaint.setStrokeJoin(Paint.Join.MITER);
         circlePaint.setStrokeWidth(3f);
         gradientColor = Color.RED;
+
+        if(newCanvas != null) {
+            this.post(new Runnable() {
+                @Override
+                public void run() {
+                    drawGradnient(newCanvas, gradientColor);
+                }
+            });
+        }
+
+
+    }
+
+    @Override
+    public void run() {
+
+      Canvas canvas =  new Canvas();
+      Paint paint =  new Paint();
+      paint.setColor(Color.TRANSPARENT);
+      canvas.drawPoint(0,0, paint);
+
     }
 
     @Override
@@ -54,17 +75,17 @@ public class ColorGradient extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
         drawGradnient(canvas,gradientColor);
         canvas.drawPath(circlePath,circlePaint);
         newCanvas = canvas;
 
+
     }
 
 
     void drawGradnient(Canvas canvas, int gradientColor){
-
 
         //canvas.drawColor(android.graphics.Color.BLACK);
         bitmap = Bitmap.createBitmap(210, 210, Bitmap.Config.ALPHA_8);
@@ -87,6 +108,7 @@ public class ColorGradient extends View {
     }
 
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
@@ -106,7 +128,7 @@ public class ColorGradient extends View {
                 invalidate();
                 break;
         }
-        return true;
+        return false;
     }
 
     private void startTouch(float x, float y) {
@@ -152,4 +174,6 @@ public class ColorGradient extends View {
     void refreshCanvas(){
         drawGradnient(newCanvas, color);
     }
+
+
 }

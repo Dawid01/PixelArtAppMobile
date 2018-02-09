@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,20 +35,20 @@ import java.util.zip.Inflater;
 public class MainActivity extends AppCompatActivity {
 
     DrawView dv ;
-    private Paint mPaint;
-    View plane;
     ImageView colorIMG;
     ImageView zoomCircle;
-    Canvas zoomCnvas;
     ImageView AlphaBG;
-    int createdColor = 0;
+    ArrayList<ColorItem> colorItems;
+    RelativeLayout appLayout;
+    RelativeLayout canvasLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setTitle("");
 
+        colorItems =  new ArrayList<>();
 
         dv = findViewById(R.id.Layout);
         dv.setContext(MainActivity.this);
@@ -59,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         dv.paint.setColor(Color.GREEN);
         dv.paint.setStrokeWidth(dv.rec);
 
+        appLayout = findViewById(R.id.AppLayout);
+        canvasLayout = findViewById(R.id.CanvasLayout);
+
         dv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -67,16 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         if (dv.zoomTouch) {
-
                             zoomCircle.setVisibility(View.VISIBLE);
-                            GradientDrawable gd = new GradientDrawable();
-                           // gd.setColor(Color.TRANSPARENT);
-                            gd.setCornerRadius(140);
-                            gd.setStroke(2, Color.DKGRAY);
-                            gd.setBounds(0,98, 0, 0);
-                            gd.draw(getZoomCnvas((int)event.getX(),(int)event.getY()));
-                            gd.setDither(true);
-                            zoomCircle.setBackground(gd);
                         }
                     case MotionEvent.ACTION_UP:
                         zoomCircle.setVisibility(View.GONE);
@@ -86,20 +82,9 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_POINTER_UP:
                         break;
                     case MotionEvent.ACTION_MOVE:
+
                         if (dv.zoomTouch) {
-                            zoomCircle.setVisibility(View.VISIBLE);
-
-                            zoomCircle.setX(event.getX() - (zoomCircle.getWidth()/2));
-                            zoomCircle.setY(event.getY() - 10);
-
-                            GradientDrawable gd = new GradientDrawable();
-                           // gd.setColor(Color.TRANSPARENT);
-                            gd.setCornerRadius(140);
-                            gd.setStroke(2, Color.DKGRAY);
-                            gd.setBounds(0,98, 0, 0);
-                            gd.draw(getZoomCnvas((int)event.getX(),(int)event.getY()));
-                            gd.setDither(true);
-                            zoomCircle.setBackground(gd);
+                            circleZoomSystem((int)event.getX(), (int)event.getY());
                         }
                         break;
                 }
@@ -109,6 +94,29 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                circleZoomSystem((int)x, (int)y);
+
+                break;
+            case MotionEvent.ACTION_MOVE:
+                circleZoomSystem((int)x, (int)y);
+
+                break;
+            case MotionEvent.ACTION_UP:
+                zoomCircle.setVisibility(View.GONE);
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -138,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.Palette:
-                ColorPicker colorPicker = new ColorPicker(MainActivity.this, getLayoutInflater(), colorIMG, dv);
+                ColorPicker colorPicker= new ColorPicker(MainActivity.this, getLayoutInflater(), colorIMG, dv, colorItems);
                 colorPicker.createColorPicker();
                 return true;
             default:
@@ -151,12 +159,47 @@ public class MainActivity extends AppCompatActivity {
     Canvas getZoomCnvas(int x, int y){
 
         Canvas canvas;
-        View v = getWindow().getDecorView().getRootView();
-        v.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
+        dv.setDrawingCacheEnabled(true);
+        dv.buildDrawingCache(true);
+        Bitmap bitmap = Bitmap.createBitmap(dv.getDrawingCache());
         canvas = new Canvas(bitmap);
         return  canvas;
     }
 
+    void circleZoomSystem(int x, int y){
+
+        if (dv.zoomTouch) {
+            try {
+                zoomCircle.setVisibility(View.VISIBLE);
+                zoomCircle.setX(x - (zoomCircle.getWidth() / 2));
+                zoomCircle.setY(y - 10);
+                View v = this.getWindow().getDecorView();
+                v.setDrawingCacheEnabled(true);
+                v.buildDrawingCache();
+                canvasLayout.setDrawingCacheEnabled(true);
+                canvasLayout.buildDrawingCache();
+                Bitmap bitmap = canvasLayout.getDrawingCache();
+                bitmap = Bitmap.createBitmap(bitmap, x - 25, y - 25, 50, 50);
+                GradientDrawable gd = new GradientDrawable();
+                Canvas canvas =  new Canvas(bitmap);
+               // zoomCircle.setImageBitmap(Bitmap.createScaledBitmap(bitmap,200,200,false));
+
+                // gd.setColor(Color.TRANSPARENT);
+                gd.setCornerRadius(140);
+                gd.setStroke(2, Color.DKGRAY);
+                gd.setBounds(0, 98, 0, 0);
+                gd.draw(getZoomCnvas(x, y));
+                gd.setDither(true);
+                gd.draw(canvas);
+                zoomCircle.setBackground(gd);
+                BitmapDrawable ob = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 120, 120, false));
+                ob.setBounds(0, 98, 0, 0);
+                //zoomCircle.setBackgroundColor(Color.WHITE);
+                zoomCircle.setImageBitmap(bitmap);
+
+                //zoomCircle.setBackgroundColor(Color.WHITE);
+            }catch (Exception e){}
+        }
+    }
 
 }

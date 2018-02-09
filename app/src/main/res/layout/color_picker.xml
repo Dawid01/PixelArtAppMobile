@@ -96,10 +96,10 @@
 
             <GridLayout
                 android:id="@+id/Colors"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:columnCount="6"
-                android:paddingTop="5dp">
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:columnCount="5"
+                android:paddingTop="10dp">
 
             </GridLayout>
         </ScrollView>

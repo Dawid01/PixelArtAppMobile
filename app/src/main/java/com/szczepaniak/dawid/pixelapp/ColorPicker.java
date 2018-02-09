@@ -6,10 +6,14 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by dawid on 06.02.2018.
@@ -22,12 +26,14 @@ public class ColorPicker {
     LayoutInflater inflater;
     final ImageView colorIMG;
     final DrawView dv;
-    public ColorPicker(Context context, LayoutInflater inflater, final ImageView colorIMG, final DrawView dv) {
+    ArrayList<ColorItem> colorItems;
+    public ColorPicker(Context context, LayoutInflater inflater, final ImageView colorIMG, final DrawView dv, ArrayList<ColorItem> colorItems) {
 
         this.context = context;
         this.inflater = inflater;
         this.colorIMG = colorIMG;
         this.dv = dv;
+        this.colorItems = colorItems;
 
     }
 
@@ -44,7 +50,7 @@ public class ColorPicker {
         final Button ok = colorPicker.findViewById(R.id.OK);
         final Button save = colorPicker.findViewById(R.id.Save);
         final Button back = colorPicker.findViewById(R.id.Back);
-
+        final GridLayout colorsGrid = colorPicker.findViewById(R.id.Colors);
         final SeekBar seekBarAlpha = colorPicker.findViewById(R.id.seekBarAlpha);
         // colorGradient.drawGradnient(colorGradient.getNewCanvas(),Color.GREEN);
 
@@ -72,13 +78,14 @@ public class ColorPicker {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        colorGradient.gradientColor = colorBar.color;
                         colorGradient.getColorBar();
+                        colorGradient.gradientColor = colorBar.color;
+
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        colorGradient.gradientColor = colorBar.color;
                         colorGradient.getColorBar();
-                        colorGradient.refreshCanvas();
+                        colorGradient.gradientColor = colorBar.color;
+                        // colorGradient.refreshCanvas();
                         break;
                 }
 
@@ -127,7 +134,45 @@ public class ColorPicker {
             }
         });
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int size = colorsGrid.getHeight()/6;
+                ColorItem colorItem = new ColorItem(context, createdColor);
+                colorItems.add(colorItem);
+                colorsGrid.removeAllViews();
+                reloadColorItems(colorsGrid);
+            }
+        });
 
+        colorsGrid.removeAllViews();
+        reloadColorItems(colorsGrid);
         colorPickerDialog.show();
     }
+
+    void reloadColorItems(GridLayout gridLayout){
+
+        int count = colorItems.size();
+        gridLayout.removeAllViews();
+
+        for(int i = 0; i < count; i++){
+
+           final ColorItem colorItem = colorItems.get(i);
+
+            colorItem.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    createdColor = colorItem.getColor();
+                    colorIMG.setBackgroundColor(createdColor);
+                    return false;
+                }
+            });
+
+            gridLayout.addView(colorItem);
+
+        }
+    }
+
+
 }
