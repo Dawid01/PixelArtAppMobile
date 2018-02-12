@@ -70,7 +70,10 @@ public class DrawView extends View{
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
-
+            Paint cr =  new Paint();
+            cr.setColor(Color.BLACK);
+            cr.setStrokeWidth(2);
+            canvas.drawPath(circlePath,cr);
             if (showGrid) {
                 int width = getMeasuredWidth();
                 int height = getMeasuredHeight();
@@ -95,9 +98,10 @@ public class DrawView extends View{
                 Draw(x, y);
                 if(zoomTouch) {
                     circlePath.reset();
-                    circlePath.addCircle(mX, mY - 100, 80, Path.Direction.CW);
-                    circlePath.addCircle(mX, mY - 100, 2, Path.Direction.CW);
-                    circlePath.addCircle(mX, mY - 100, 80, Path.Direction.CW);
+                    circlePath.reset();
+                    //circlePath.addCircle(mX, mY - 100, 80, Path.Direction.CW);
+                    circlePath.addCircle(mX, mY, 2, Path.Direction.CW);
+                   // circlePath.addCircle(mX, mY - 100, 80, Path.Direction.CW);
                 }
 
         }
@@ -106,6 +110,7 @@ public class DrawView extends View{
             circlePath.reset();
             mCanvas.drawPath(mPath,  paint);
             mPath.reset();
+            circlePath.reset();
         }
 
         @Override

@@ -128,7 +128,7 @@ public class ColorGradient extends View implements Runnable {
                 invalidate();
                 break;
         }
-        return false;
+        return true;
     }
 
     private void startTouch(float x, float y) {

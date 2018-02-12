@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ColorItem> colorItems;
     RelativeLayout appLayout;
     RelativeLayout canvasLayout;
+    ImageView TypeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         zoomCircle = findViewById(R.id.ZoomCircle);
         AlphaBG = findViewById(R.id.AlphaBG);
         AlphaBG.setVisibility(View.GONE);
+
+        TypeImage = findViewById(R.id.TypeImage);
+
 
         dv.paint.setColor(Color.GREEN);
         dv.paint.setStrokeWidth(dv.rec);
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_POINTER_UP:
                         break;
                     case MotionEvent.ACTION_MOVE:
-
                         if (dv.zoomTouch) {
                             circleZoomSystem((int)event.getX(), (int)event.getY());
                         }
@@ -97,27 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
 
-        float x = event.getX();
-        float y = event.getY();
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                circleZoomSystem((int)x, (int)y);
-
-                break;
-            case MotionEvent.ACTION_MOVE:
-                circleZoomSystem((int)x, (int)y);
-
-                break;
-            case MotionEvent.ACTION_UP:
-                zoomCircle.setVisibility(View.GONE);
-                break;
-        }
-        return true;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,18 +115,23 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Draw:
                 dv.draw = true;
                 dv.paint.setColor(Color.GREEN);
+                TypeImage.setImageResource(R.mipmap.drawikon);
                 return true;
             case R.id.Rubber:
                 dv.draw = false;
                 dv.paint.setColor(Color.WHITE);
+                TypeImage.setImageResource(R.mipmap.rubberikon);
                 return true;
-            case R.id.Grid:
-                dv.showGrid = !dv.showGrid;
-                if(dv.showGrid){
-                    AlphaBG.setVisibility(View.GONE);
-                }else {
-                    AlphaBG.setVisibility(View.VISIBLE);
-                }
+            case R.id.Options:
+
+                optionsPopUp();
+                return true;
+
+            case R.id.Fill:
+                TypeImage.setImageResource(R.mipmap.filicon);
+                return true;
+            case R.id.Move:
+                TypeImage.setImageResource(R.mipmap.moveikon);
                 return true;
             case R.id.Palette:
                 ColorPicker colorPicker= new ColorPicker(MainActivity.this, getLayoutInflater(), colorIMG, dv, colorItems);
@@ -172,14 +160,19 @@ public class MainActivity extends AppCompatActivity {
             try {
                 zoomCircle.setVisibility(View.VISIBLE);
                 zoomCircle.setX(x - (zoomCircle.getWidth() / 2));
-                zoomCircle.setY(y - 10);
+                zoomCircle.setY(y - 20);
                 View v = this.getWindow().getDecorView();
                 v.setDrawingCacheEnabled(true);
                 v.buildDrawingCache();
                 canvasLayout.setDrawingCacheEnabled(true);
                 canvasLayout.buildDrawingCache();
                 Bitmap bitmap = canvasLayout.getDrawingCache();
-                bitmap = Bitmap.createBitmap(bitmap, x - 25, y - 25, 50, 50);
+//                int scale = 2;
+//                x = x*scale;
+//                y = y* scale;
+              //  if(y < canvasLayout.g) {
+                    bitmap = Bitmap.createBitmap(bitmap, x - 25, y - 25, 50, 50);
+               // }
                 GradientDrawable gd = new GradientDrawable();
                 Canvas canvas =  new Canvas(bitmap);
                // zoomCircle.setImageBitmap(Bitmap.createScaledBitmap(bitmap,200,200,false));
@@ -200,6 +193,27 @@ public class MainActivity extends AppCompatActivity {
                 //zoomCircle.setBackgroundColor(Color.WHITE);
             }catch (Exception e){}
         }
+    }
+
+    void changeGrid(){
+        dv.showGrid = !dv.showGrid;
+        if(dv.showGrid){
+            AlphaBG.setVisibility(View.GONE);
+        }else {
+            AlphaBG.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void optionsPopUp(){
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        final View options = getLayoutInflater().inflate(R.layout.options_layout, null);
+
+
+        mBuilder.setView(options);
+        final AlertDialog optionsDialog = mBuilder.create();
+
+        optionsDialog.show();
     }
 
 }

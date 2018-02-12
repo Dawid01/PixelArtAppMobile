@@ -24,7 +24,7 @@
         android:icon="@mipmap/moveikon"
         app:showAsAction="always" />
     <item
-        android:id="@+id/Grid"
-        android:icon="@mipmap/gridikon"
+        android:id="@+id/Options"
+        android:icon="@mipmap/optionsicon"
         app:showAsAction="always" />
 </menu>

@@ -154,7 +154,7 @@ public class ColorPicker {
 
         int count = colorItems.size();
         gridLayout.removeAllViews();
-
+        
         for(int i = 0; i < count; i++){
 
            final ColorItem colorItem = colorItems.get(i);

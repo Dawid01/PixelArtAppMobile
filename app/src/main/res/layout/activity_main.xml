@@ -35,6 +35,7 @@
                 android:layout_height="350dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:scaleY="2"
                 app:srcCompat="@mipmap/alphabg" />
 
             <com.szczepaniak.dawid.pixelapp.DrawView
@@ -76,9 +77,18 @@
             <GridLayout
                 android:id="@+id/Palette"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:rowCount="1">
 
+                <ImageView
+                    android:id="@+id/TypeImage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/colorPrimary"
+                    android:padding="5dp"
+                    app:srcCompat="@mipmap/drawikon" />
             </GridLayout>
         </HorizontalScrollView>
     </RelativeLayout>
