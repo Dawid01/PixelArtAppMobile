@@ -35,6 +35,8 @@ public class DrawView extends View{
         boolean rubber = false;
         boolean zoomTouch = true;
 
+        boolean isZoom;
+
         float tx,ty;
         ArrayList<Float> Xpos;
         ArrayList<Float> Ypos;
@@ -69,22 +71,25 @@ public class DrawView extends View{
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
-            Paint cr =  new Paint();
-            cr.setColor(Color.BLACK);
-            cr.setStrokeWidth(2);
-            canvas.drawPath(circlePath,cr);
-            if (showGrid) {
-                int width = getMeasuredWidth();
-                int height = getMeasuredHeight();
-                for (int i = 1; i <resolution; i++) {
-                    canvas.drawLine(width * i / resolution, 0, width * i / resolution, height, gridPaint);
+
+                canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+                Paint cr = new Paint();
+                cr.setColor(Color.BLACK);
+                cr.setStrokeWidth(2);
+                canvas.drawPath(circlePath, cr);
+
+                if (showGrid) {
+                    int width = getMeasuredWidth();
+                    int height = getMeasuredHeight();
+                    for (int i = 1; i < resolution; i++) {
+                        canvas.drawLine(width * i / resolution, 0, width * i / resolution, height, gridPaint);
+                    }
+
+                    for (int i = 1; i < resolution; i++) {
+                        canvas.drawLine(0, height * i / resolution, width, height * i / resolution, gridPaint);
+                    }
                 }
 
-                for (int i = 1; i < resolution; i++) {
-                    canvas.drawLine(0, height * i / resolution, width, height * i / resolution, gridPaint);
-                }
-            }
         }
 
         private float mX, mY;
@@ -151,38 +156,40 @@ public class DrawView extends View{
 
     void Draw(float touchX, float touchY){
 
-        if(Xpos.size() == 0|| Ypos.size() == 0) {
-            rec = 350f/resolution;
-            float pixelCount = 350f/ rec;
-            float x = 0;
-            float y = 0;
-            for (float i = 0; i < pixelCount; i++) {
+        if(!isZoom) {
+            if (Xpos.size() == 0 || Ypos.size() == 0) {
+                rec = 350f / resolution;
+                float pixelCount = 350f / rec;
+                float x = 0;
+                float y = 0;
+                for (float i = 0; i < pixelCount; i++) {
 
-                if (i > 0) {
-                    x += rec;
-                    y += rec;
-                    Xpos.add(x);
-                    Ypos.add(y);
-                }else {
-                    x = rec/2f;
-                    y = rec/2f;
-                    Xpos.add(x);
-                    Ypos.add(y);
+                    if (i > 0) {
+                        x += rec;
+                        y += rec;
+                        Xpos.add(x);
+                        Ypos.add(y);
+                    } else {
+                        x = rec / 2f;
+                        y = rec / 2f;
+                        Xpos.add(x);
+                        Ypos.add(y);
+                    }
+
                 }
-
             }
+
+            mPath.reset();
+            mPath.moveTo(touchX, touchY);
+            tx = touchX;
+            ty = touchX;
+
+            RoundPos roundPos = new RoundPos();
+            float posX = roundPos.roundPos(touchX, Xpos);
+            float posY = roundPos.roundPos(touchY, Ypos);
+            paint.setStrokeWidth(rec);
+            mCanvas.drawPoint(posX, posY, paint);
         }
-
-        mPath.reset();
-        mPath.moveTo(touchX, touchY);
-        tx = touchX;
-        ty = touchX;
-
-        RoundPos roundPos =  new RoundPos();
-        float posX =  roundPos.roundPos(touchX,Xpos);
-        float posY =  roundPos.roundPos(touchY,Ypos);
-        paint.setStrokeWidth(rec);
-        mCanvas.drawPoint(posX,posY,paint);
     }
 
     void resetCanvas(){

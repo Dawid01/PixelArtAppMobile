@@ -27,13 +27,15 @@ public class ColorPicker {
     final ImageView colorIMG;
     final DrawView dv;
     ArrayList<ColorItem> colorItems;
-    public ColorPicker(Context context, LayoutInflater inflater, final ImageView colorIMG, final DrawView dv, ArrayList<ColorItem> colorItems) {
+    GridLayout colorsPalette;
+    public ColorPicker(Context context, LayoutInflater inflater, final ImageView colorIMG, final DrawView dv, ArrayList<ColorItem> colorItems, GridLayout colorsGrid) {
 
         this.context = context;
         this.inflater = inflater;
         this.colorIMG = colorIMG;
         this.dv = dv;
         this.colorItems = colorItems;
+        this.colorsPalette = colorsGrid;
 
     }
 
@@ -78,14 +80,23 @@ public class ColorPicker {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
+                        colorGradient.refreshCanvas();
                         colorGradient.getColorBar();
                         colorGradient.gradientColor = colorBar.color;
+                        imageColor.setBackgroundColor(colorGradient.color);
+                        createdColor = colorGradient.color;
+                        String hexColor = String.format("#%06X", (0xFFFFFF & colorGradient.color));
+                        colorText.setText(hexColor);
 
                         break;
                     case MotionEvent.ACTION_MOVE:
+                        colorGradient.refreshCanvas();
                         colorGradient.getColorBar();
                         colorGradient.gradientColor = colorBar.color;
-                        // colorGradient.refreshCanvas();
+                        imageColor.setBackgroundColor(colorGradient.color);
+                        createdColor = colorGradient.color;
+                        String hexColor2 = String.format("#%06X", (0xFFFFFF & colorGradient.color));
+                        colorText.setText(hexColor2);
                         break;
                 }
 
@@ -138,15 +149,26 @@ public class ColorPicker {
             @Override
             public void onClick(View v) {
                 int size = colorsGrid.getHeight()/6;
-                ColorItem colorItem = new ColorItem(context, createdColor);
+                final ColorItem colorItem = new ColorItem(context, createdColor);
                 colorItems.add(colorItem);
-                colorsGrid.removeAllViews();
-                reloadColorItems(colorsGrid);
+              //  colorsGrid.removeAllViews();
+                //reloadColorItems(colorsGrid);
+
+                colorItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        colorIMG.setBackgroundColor(colorItem.getColor());
+                        dv.paint.setColor(colorItem.getColor());
+                    }
+                });
+
+                colorsPalette.addView(colorItem);
             }
         });
 
-        colorsGrid.removeAllViews();
-        reloadColorItems(colorsGrid);
+        //colorsGrid.removeAllViews();
+       // reloadColorItems(colorsGrid);
         colorPickerDialog.show();
     }
 

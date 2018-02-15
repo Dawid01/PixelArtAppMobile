@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -42,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout appLayout;
     RelativeLayout canvasLayout;
     ImageView TypeImage;
+    GridLayout colorsGrid;
+    boolean isZoom;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("");
 
-        colorItems =  new ArrayList<>();
+        colorItems = new ArrayList<>();
 
         dv = findViewById(R.id.Layout);
         dv.setContext(MainActivity.this);
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         AlphaBG.setVisibility(View.GONE);
 
         TypeImage = findViewById(R.id.TypeImage);
-
+        colorsGrid = findViewById(R.id.Palette);
 
         dv.paint.setColor(Color.GREEN);
         dv.paint.setStrokeWidth(dv.rec);
@@ -68,34 +73,39 @@ public class MainActivity extends AppCompatActivity {
         appLayout = findViewById(R.id.AppLayout);
         canvasLayout = findViewById(R.id.CanvasLayout);
 
+        ZoomClass zoomClass = new ZoomClass(MainActivity.this, canvasLayout);
+
         dv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (dv.zoomTouch) {
-                            zoomCircle.setVisibility(View.VISIBLE);
-                        }
-                    case MotionEvent.ACTION_UP:
-                        zoomCircle.setVisibility(View.GONE);
-                        break;
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        break;
-                    case MotionEvent.ACTION_POINTER_UP:
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (dv.zoomTouch) {
-                            circleZoomSystem((int)event.getX(), (int)event.getY());
-                        }
-                        break;
+                if (!isZoom) {
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_DOWN:
+                            if (dv.zoomTouch) {
+                                zoomCircle.setVisibility(View.VISIBLE);
+                            }
+                        case MotionEvent.ACTION_UP:
+                            zoomCircle.setVisibility(View.GONE);
+                            break;
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            break;
+                        case MotionEvent.ACTION_POINTER_UP:
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (dv.zoomTouch) {
+                                circleZoomSystem((int) event.getX(), (int) event.getY());
+                            }
+                            break;
+                    }
                 }
+                return false;
 
-                    return false;
-                }
+            }
 
         });
+
+
 
     }
 
@@ -116,11 +126,15 @@ public class MainActivity extends AppCompatActivity {
                 dv.draw = true;
                 dv.paint.setColor(Color.GREEN);
                 TypeImage.setImageResource(R.mipmap.drawikon);
+                isZoom = false;
+                dv.isZoom = false;
                 return true;
             case R.id.Rubber:
                 dv.draw = false;
                 dv.paint.setColor(Color.WHITE);
                 TypeImage.setImageResource(R.mipmap.rubberikon);
+                isZoom = false;
+                dv.isZoom = false;
                 return true;
             case R.id.Options:
 
@@ -132,9 +146,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.Move:
                 TypeImage.setImageResource(R.mipmap.moveikon);
+                isZoom = true;
+                dv.isZoom = true;
                 return true;
             case R.id.Palette:
-                ColorPicker colorPicker= new ColorPicker(MainActivity.this, getLayoutInflater(), colorIMG, dv, colorItems);
+                ColorPicker colorPicker= new ColorPicker(MainActivity.this, getLayoutInflater(), colorIMG, dv, colorItems, colorsGrid);
                 colorPicker.createColorPicker();
                 return true;
             default:
@@ -216,4 +232,8 @@ public class MainActivity extends AppCompatActivity {
         optionsDialog.show();
     }
 
+
 }
+
+
+//https://android-arsenal.com/details/1/6282

@@ -172,7 +172,13 @@ public class ColorGradient extends View implements Runnable {
     }
 
     void refreshCanvas(){
-        drawGradnient(newCanvas, color);
+
+        invalidate();
+        int pixel = gradientPaletteBtm.getPixel((int)tx,(int)ty);
+        int r = Color.red(pixel);
+        int g = Color.green(pixel);
+        int b = Color.blue(pixel);
+        color = Color.rgb(r,g,b);
     }
 
 

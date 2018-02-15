@@ -14,25 +14,31 @@
         android:layout_height="match_parent"
         android:foregroundGravity="center">
 
+        <!-- Content here. -->
+
+
         <RelativeLayout
             android:id="@+id/CanvasLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_above="@+id/relativeLayout"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true">
+            android:layout_marginBottom="37dp"
+            android:scaleX="1"
+            android:scaleY="1">
 
             <ImageView
                 android:id="@+id/BG"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@android:color/background_light" />
 
             <ImageView
                 android:id="@+id/AlphaBG"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:scaleY="2"
@@ -40,20 +46,20 @@
 
             <com.szczepaniak.dawid.pixelapp.DrawView
                 android:id="@+id/Layout"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_alignStart="@+id/BG"
                 android:layout_alignTop="@+id/BG">
 
             </com.szczepaniak.dawid.pixelapp.DrawView>
         </RelativeLayout>
 
+
         <ImageView
             android:id="@+id/ZoomCircle"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_alignEnd="@+id/BG"
-            android:layout_alignTop="@+id/BG"
+
             android:layout_marginEnd="121dp"
             android:layout_marginTop="61dp"
             android:background="@mipmap/ic_launcher"
@@ -67,30 +73,42 @@
             android:layout_height="10dp"
             android:background="@android:color/holo_green_dark" />
 
-        <HorizontalScrollView
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:background="@color/colorAccent">
 
-            <GridLayout
-                android:id="@+id/Palette"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:rowCount="1">
+            <ImageView
+                android:id="@+id/TypeImage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimary"
+                android:padding="5dp"
+                app:srcCompat="@mipmap/drawikon" />
 
-                <ImageView
-                    android:id="@+id/TypeImage"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorPrimary"
-                    android:padding="5dp"
-                    app:srcCompat="@mipmap/drawikon" />
-            </GridLayout>
-        </HorizontalScrollView>
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/TypeImage"
+                android:background="@color/colorAccent">
+
+                <GridLayout
+                    android:id="@+id/Palette"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:rowCount="1">
+
+                </GridLayout>
+            </HorizontalScrollView>
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
