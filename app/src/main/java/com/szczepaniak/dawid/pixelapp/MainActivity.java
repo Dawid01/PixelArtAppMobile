@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ScaleDrawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,9 +23,12 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     GridLayout colorsGrid;
     boolean isZoom;
 
+    FloatingActionButton backDraws;
 
 
     @Override
@@ -72,6 +77,16 @@ public class MainActivity extends AppCompatActivity {
 
         appLayout = findViewById(R.id.AppLayout);
         canvasLayout = findViewById(R.id.CanvasLayout);
+
+        backDraws = findViewById(R.id.Back);
+
+
+        backDraws.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dv.loadBackDraw();
+            }
+        });
 
         ZoomClass zoomClass = new ZoomClass(MainActivity.this, canvasLayout);
 
@@ -109,9 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -124,17 +136,19 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.Draw:
                 dv.draw = true;
-                dv.paint.setColor(Color.GREEN);
                 TypeImage.setImageResource(R.mipmap.drawikon);
                 isZoom = false;
                 dv.isZoom = false;
+                dv.rubber = false;
                 return true;
             case R.id.Rubber:
-                dv.draw = false;
-                dv.paint.setColor(Color.WHITE);
+               // dv.draw = false;
+                dv.styleDraw = 0;
+                //dv.paint.setColor(Color.WHITE);
                 TypeImage.setImageResource(R.mipmap.rubberikon);
                 isZoom = false;
                 dv.isZoom = false;
+                dv.styleDraw = 1;
                 return true;
             case R.id.Options:
 
@@ -143,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.Fill:
                 TypeImage.setImageResource(R.mipmap.filicon);
+                dv.styleDraw = 2;
                 return true;
             case R.id.Move:
                 TypeImage.setImageResource(R.mipmap.moveikon);
@@ -183,6 +198,10 @@ public class MainActivity extends AppCompatActivity {
                 canvasLayout.setDrawingCacheEnabled(true);
                 canvasLayout.buildDrawingCache();
                 Bitmap bitmap = canvasLayout.getDrawingCache();
+               // appLayout.setDrawingCacheEnabled(true);
+                //appLayout.buildDrawingCache();
+               // Bitmap bitmap = appLayout.getDrawingCache();
+
 //                int scale = 2;
 //                x = x*scale;
 //                y = y* scale;
@@ -224,6 +243,37 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         final View options = getLayoutInflater().inflate(R.layout.options_layout, null);
+        final Button gridB = options.findViewById(R.id.Grid);
+        final Button zoomTB = options.findViewById(R.id.TouchZoom);
+
+        zoomTB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dv.zoomTouch){
+                    dv.zoomTouch = false;
+                }else {
+                    dv.zoomTouch = true;
+
+                }
+            }
+        });
+
+        gridB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dv.showGrid){
+                    dv.showGrid = false;
+                    AlphaBG.setVisibility(View.VISIBLE);
+                    dv.invalidate();
+                }else {
+                    dv.showGrid = true;
+                    AlphaBG.setVisibility(View.GONE);
+                    dv.invalidate();
+
+                }
+            }
+        });
+
 
 
         mBuilder.setView(options);

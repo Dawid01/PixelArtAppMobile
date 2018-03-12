@@ -97,7 +97,8 @@ public class ColorBar extends View {
 
     private void upTouch() {
 
-        linePath.addCircle(tx, ty, 3, Path.Direction.CW);
+        linePath.addCircle(tx, ty, 4, Path.Direction.CW);
+        //linePath.addOval(10,1,10,1,Path.Direction.CW);
     }
 
     @Override

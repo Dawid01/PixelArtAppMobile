@@ -44,7 +44,7 @@ public class ColorGradient extends View implements Runnable {
         circlePaint.setColor(Color.DKGRAY);
         circlePaint.setStyle(Paint.Style.STROKE);
         circlePaint.setStrokeJoin(Paint.Join.MITER);
-        circlePaint.setStrokeWidth(3f);
+        circlePaint.setStrokeWidth(2f);
         gradientColor = Color.RED;
 
         if(newCanvas != null) {
@@ -135,7 +135,7 @@ public class ColorGradient extends View implements Runnable {
         try {
             circlePath.reset();
             circlePath.reset();
-            circlePath.addCircle(x, y, 3, Path.Direction.CW);
+            circlePath.addCircle(x, y, 10, Path.Direction.CW);
             int pixel = gradientPaletteBtm.getPixel((int) x, (int) y);
             int r = Color.red(pixel);
             int g = Color.green(pixel);
@@ -160,7 +160,7 @@ public class ColorGradient extends View implements Runnable {
 
     private void upTouch() {
 
-        circlePath.addCircle(tx, ty, 3, Path.Direction.CW);
+        circlePath.addCircle(tx, ty, 10, Path.Direction.CW);
     }
 
     void getColorBar(){

@@ -21,9 +21,8 @@
             android:id="@+id/CanvasLayout"
             android:layout_width="350dp"
             android:layout_height="350dp"
-            android:layout_above="@+id/relativeLayout"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="37dp"
+            android:layout_centerVertical="true"
             android:scaleX="1"
             android:scaleY="1">
 
@@ -108,6 +107,20 @@
                 </GridLayout>
             </HorizontalScrollView>
         </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/CanvasLayout"
+            android:layout_alignEnd="@+id/CanvasLayout"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:rippleColor="@color/colorAccent"
+            app:srcCompat="@mipmap/arrowback" />
 
     </RelativeLayout>
 

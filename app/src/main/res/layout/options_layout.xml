@@ -17,28 +17,23 @@
         android:textColor="@android:color/background_light"
         android:textSize="24sp" />
 
-    <Space
+    <Button
+        android:id="@+id/Grid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/Settings"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/Settings"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="110dp"
-        android:id="@+id/space" />
-
-    <Switch
-        android:id="@+id/Grid"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/space"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="65dp"
         android:layout_marginTop="43dp"
-        android:checked="true"
-        android:showText="true"
-        android:splitTrack="true"
-        android:text="Grid"
-        android:textColor="@android:color/background_light"
-        android:textOff="OFF"
-        android:textOn="ON" />
+        android:text="Grid" />
+
+    <Button
+        android:id="@+id/TouchZoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/Grid"
+        android:layout_alignBottom="@+id/Grid"
+        android:layout_toEndOf="@+id/Grid"
+        android:text="Touch zoom" />
 
 </RelativeLayout>
