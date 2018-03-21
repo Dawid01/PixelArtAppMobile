@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PixelApp.iml" filepath="$PROJECT_DIR$/PixelApp.iml" />
+      <module fileurl="file://D:\AndroidStudioProjects\pixelapp\PixelApp.iml" filepath="D:\AndroidStudioProjects\pixelapp\PixelApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\AndroidStudioProjects\pixelapp\app\app.iml" filepath="D:\AndroidStudioProjects\pixelapp\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pixelapp.iml" filepath="$PROJECT_DIR$/pixelapp.iml" />
     </modules>
   </component>
 </project>
