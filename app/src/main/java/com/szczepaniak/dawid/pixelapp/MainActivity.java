@@ -1,41 +1,26 @@
 package com.szczepaniak.dawid.pixelapp;
 
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
-import java.io.EOFException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     GridLayout colorsGrid;
     boolean isZoom;
 
-    FloatingActionButton backDraws;
+    FloatingActionButton projectsButton;
 
 
     @Override
@@ -78,13 +63,16 @@ public class MainActivity extends AppCompatActivity {
         appLayout = findViewById(R.id.AppLayout);
         canvasLayout = findViewById(R.id.CanvasLayout);
 
-        backDraws = findViewById(R.id.Back);
+        projectsButton = findViewById(R.id.Back);
 
 
-        backDraws.setOnClickListener(new View.OnClickListener() {
+        projectsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dv.loadBackDraw();
+                Intent intent = new Intent(MainActivity.this, SavedProjects.class);
+                startActivity(intent);
+                MainActivity.this.overridePendingTransition(R.anim.righttoleft,
+                        R.anim.stay);
             }
         });
 
