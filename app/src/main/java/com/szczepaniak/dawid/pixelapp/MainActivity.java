@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!isZoom) {
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
-                            if (dv.zoomTouch) {
+                            if (dv.zoomTouch && dv.styleDraw != 2) {
                                 zoomCircle.setVisibility(View.VISIBLE);
                             }
                         case MotionEvent.ACTION_UP:
@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity {
                 isZoom = false;
                 dv.isZoom = false;
                 dv.rubber = false;
+                dv.styleDraw = 0;
                 return true;
             case R.id.Rubber:
-               // dv.draw = false;
-                dv.styleDraw = 0;
+                // dv.draw = false;
                 //dv.paint.setColor(Color.WHITE);
                 TypeImage.setImageResource(R.mipmap.rubberikon);
                 isZoom = false;
@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 dv.styleDraw = 1;
                 return true;
             case R.id.Options:
-
                 optionsPopUp();
                 return true;
 
@@ -183,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(dv.getDrawingCache());
         canvas = new Canvas(bitmap);
         return  canvas;
+
     }
 
     void circleZoomSystem(int x, int y){
@@ -198,19 +198,12 @@ public class MainActivity extends AppCompatActivity {
                 canvasLayout.setDrawingCacheEnabled(true);
                 canvasLayout.buildDrawingCache();
                 Bitmap bitmap = canvasLayout.getDrawingCache();
-               // appLayout.setDrawingCacheEnabled(true);
-                //appLayout.buildDrawingCache();
-               // Bitmap bitmap = appLayout.getDrawingCache();
 
-//                int scale = 2;
-//                x = x*scale;
-//                y = y* scale;
-              //  if(y < canvasLayout.g) {
-                    bitmap = Bitmap.createBitmap(bitmap, x - 25, y - 25, 50, 50);
-               // }
+                bitmap = Bitmap.createBitmap(bitmap, x - 25, y - 25, 50, 50);
+                // }
                 GradientDrawable gd = new GradientDrawable();
                 Canvas canvas =  new Canvas(bitmap);
-               // zoomCircle.setImageBitmap(Bitmap.createScaledBitmap(bitmap,200,200,false));
+                // zoomCircle.setImageBitmap(Bitmap.createScaledBitmap(bitmap,200,200,false));
 
                 // gd.setColor(Color.TRANSPARENT);
                 gd.setCornerRadius(140);
