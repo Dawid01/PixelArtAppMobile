@@ -8,20 +8,20 @@ import android.graphics.Bitmap;
 
 public class ProjectItem {
 
-    Bitmap artBitmap;
+    String artBitmap;
     String nameProject;
 
-    public ProjectItem(Bitmap artBitmap, String nameProject) {
+    public ProjectItem(String artBitmap, String nameProject) {
         this.artBitmap = artBitmap;
         this.nameProject = nameProject;
     }
 
 
-    public Bitmap getArtBitmap() {
+    public String getArtBitmap() {
         return artBitmap;
     }
 
-    public void setArtBitmap(Bitmap artBitmap) {
+    public void setArtBitmap(String artBitmap) {
         this.artBitmap = artBitmap;
     }
 

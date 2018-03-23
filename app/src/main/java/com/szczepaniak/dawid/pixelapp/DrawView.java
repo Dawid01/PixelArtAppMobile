@@ -27,7 +27,9 @@ import java.util.Queue;
 public class DrawView extends View{
 
         Bitmap mBitmap;
-        Canvas mCanvas;
+        Bitmap newBitmap;
+
+          Canvas mCanvas;
         private Path mPath;
         private Paint mBitmapPaint;
         Context context;
@@ -55,6 +57,8 @@ public class DrawView extends View{
 
         ArrayList<Canvas> savedDraws;
 
+        boolean isNewBitmap;
+
     Paint paint = new Paint();
 
         public DrawView(Context c,  AttributeSet attrs) {
@@ -72,6 +76,7 @@ public class DrawView extends View{
             Xpos = new ArrayList<>();
             Ypos = new ArrayList<>();
             savedDraws =  new ArrayList<>();
+
         }
 
         @Override
@@ -85,13 +90,21 @@ public class DrawView extends View{
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-
+            if(newBitmap!= null){
+                Paint paint = new Paint();
+                paint.setAntiAlias(true);
+                paint.setFilterBitmap(true);
+                paint.setDither(true);
+                canvas.drawBitmap(newBitmap,0,0,paint);
+            }
                 canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
                 Paint cr = new Paint();
                 cr.setColor(Color.BLACK);
                 cr.setStrokeWidth(2);
                 canvas.drawPath(circlePath, cr);
                 savedDraws.add(canvas);
+
+
 
                 if(isBackDraws){
 
@@ -115,6 +128,12 @@ public class DrawView extends View{
         }
 
         private float mX, mY;
+
+        public void DrawNewBitmap(Bitmap bitmap){
+
+            newBitmap = bitmap;
+            invalidate();
+        }
 
         private void startTouch(float x, float y) {
 

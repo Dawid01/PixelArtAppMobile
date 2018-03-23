@@ -8,6 +8,9 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,13 +79,26 @@ public class SavedProjects extends AppCompatActivity {
 
         for(int i = 0; i < projectItems.size(); i++){
 
-            ProjectItem item = projectItems.get(i);
+            final ProjectItem item = projectItems.get(i);
             final View projectView = planItem.inflate(R.layout.project, layout, false);
             TextView projectName = projectView.findViewById(R.id.ProjectName);
             ImageView img = projectView.findViewById(R.id.ProjectImage);
-           // img.setImageBitmap(item.getArtBitmap());
+            BitmapString bitmapString =  new BitmapString();
+            img.setImageBitmap(bitmapString.StringToBitMap(item.getArtBitmap()));
             projectName.setText(item.getNameProject());
             projectListLayout.addView(projectView);
+
+            projectView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(SavedProjects.this, MainActivity.class);
+                    intent.putExtra("BitmapString", item.getArtBitmap());
+                    startActivity(intent);
+                    SavedProjects.this.overridePendingTransition(0,
+                            R.anim.lefttoright);
+                }
+            });
 
         }
 

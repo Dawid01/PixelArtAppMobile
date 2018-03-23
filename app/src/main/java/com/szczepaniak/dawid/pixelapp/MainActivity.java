@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     GridLayout colorsGrid;
     boolean isZoom;
 
+    boolean projectIsSaved;
+    int projectIndex;
+
     FloatingActionButton projectsButton;
 
 
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         canvasLayout = findViewById(R.id.CanvasLayout);
 
         projectsButton = findViewById(R.id.Back);
+
+
 
 
         projectsButton.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +113,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+        String bitmapString = getIntent().getStringExtra("BitmapString");
+
+        if(bitmapString != null){
+
+            BitmapString b = new BitmapString();
+            Bitmap bitmap = b.StringToBitMap(bitmapString);
+            dv.DrawNewBitmap(bitmap);
+        }
 
 
     }
@@ -245,7 +259,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 SavingSystem savingSystem =  new SavingSystem();
-                ProjectItem projectItem = new ProjectItem(null,"Project");
+                BitmapString bitmapString =  new BitmapString();
+                dv.showGrid = false;
+                dv.invalidate();
+                ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),"Project");
+                dv.showGrid = true;
+                dv.invalidate();
                 savingSystem.saveNewProject(projectItem, MainActivity.this);
             }
         });
