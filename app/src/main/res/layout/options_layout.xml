@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
+    <Button
+        android:id="@+id/Save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/Grid"
+        android:layout_below="@+id/TouchZoom"
+        android:layout_marginTop="16dp"
+        android:text="Save" />
+
     <TextView
         android:id="@+id/Settings"
         android:layout_width="wrap_content"
@@ -21,19 +30,18 @@
         android:id="@+id/Grid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/Settings"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="43dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
         android:text="Grid" />
 
     <Button
         android:id="@+id/TouchZoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Grid"
-        android:layout_alignBottom="@+id/Grid"
-        android:layout_toEndOf="@+id/Grid"
+        android:layout_alignEnd="@+id/Settings"
+        android:layout_below="@+id/Grid"
+        android:layout_marginTop="16dp"
         android:text="Touch zoom" />
 
 </RelativeLayout>

@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         final View options = getLayoutInflater().inflate(R.layout.options_layout, null);
         final Button gridB = options.findViewById(R.id.Grid);
         final Button zoomTB = options.findViewById(R.id.TouchZoom);
+        final Button Save = options.findViewById(R.id.Save);
 
         zoomTB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,6 +237,16 @@ public class MainActivity extends AppCompatActivity {
                     dv.zoomTouch = true;
 
                 }
+            }
+        });
+
+        Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SavingSystem savingSystem =  new SavingSystem();
+                ProjectItem projectItem = new ProjectItem(null,"Project");
+                savingSystem.saveNewProject(projectItem, MainActivity.this);
             }
         });
 
