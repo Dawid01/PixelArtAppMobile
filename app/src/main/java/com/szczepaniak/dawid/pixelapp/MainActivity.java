@@ -16,9 +16,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -257,15 +259,7 @@ public class MainActivity extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                SavingSystem savingSystem =  new SavingSystem();
-                BitmapString bitmapString =  new BitmapString();
-                dv.showGrid = false;
-                dv.invalidate();
-                ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),"Project");
-                dv.showGrid = true;
-                dv.invalidate();
-                savingSystem.saveNewProject(projectItem, MainActivity.this);
+                CreateProject();
             }
         });
 
@@ -293,6 +287,49 @@ public class MainActivity extends AppCompatActivity {
         optionsDialog.show();
     }
 
+    void CreateProject(){
+
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        final View createProject = getLayoutInflater().inflate(R.layout.create_project, null);
+
+        final EditText name = createProject.findViewById(R.id.ProjectName);
+        Button create = createProject.findViewById(R.id.Create);
+        mBuilder.setView(createProject);
+        final AlertDialog dialog = mBuilder.create();
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String n = name.getText().toString();
+                int count = 0;
+
+                for( int i=0; i<n.length(); i++ ) {
+                    count++;
+                }
+                if(count <= 10){
+
+                    SavingSystem savingSystem =  new SavingSystem();
+                    BitmapString bitmapString =  new BitmapString();
+                    dv.showGrid = false;
+                    dv.invalidate();
+                    ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),name.getText().toString());
+                    dv.showGrid = true;
+                    dv.invalidate();
+                    savingSystem.saveNewProject(projectItem, MainActivity.this);
+                    dialog.dismiss();
+
+                }else {
+
+                    Toast.makeText(MainActivity.this,"Max 10 chars", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        dialog.show();
+
+    }
 
 }
 

@@ -21,9 +21,10 @@
             android:id="@+id/ProjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_above="@+id/Delete"
+            android:layout_marginBottom="11dp"
             android:layout_marginStart="21dp"
-            android:layout_toEndOf="@+id/ProjectImage"
+            android:layout_toEndOf="@+id/projectImage"
             android:fontFamily="monospace"
             android:text="Project Name"
             android:textAlignment="viewStart"
@@ -36,6 +37,14 @@
             android:layout_width="90dp"
             android:layout_height="100dp"
             app:srcCompat="@drawable/ic_menu_gallery" />
+
+        <ImageView
+            android:id="@+id/Delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/ProjectName"
+            app:srcCompat="@android:drawable/ic_delete" />
     </RelativeLayout>
 
 </RelativeLayout>

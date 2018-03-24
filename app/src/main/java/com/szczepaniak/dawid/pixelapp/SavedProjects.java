@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -69,24 +71,52 @@ public class SavedProjects extends AppCompatActivity {
 
     void loadProjects(){
 
+        projectListLayout.removeAllViews();
         projectItems = savingSystem.getProjectsList(SavedProjects.this);
 
-       // for (int i = 0; i < 20; i++){
-
-            //projectItems.add(new ProjectItem(null,"Project" + i));
-       // }
         LayoutInflater planItem = (LayoutInflater) getSystemService(SavedProjects.LAYOUT_INFLATER_SERVICE);
 
         for(int i = 0; i < projectItems.size(); i++){
 
+            final int index = i;
             final ProjectItem item = projectItems.get(i);
             final View projectView = planItem.inflate(R.layout.project, layout, false);
             TextView projectName = projectView.findViewById(R.id.ProjectName);
             ImageView img = projectView.findViewById(R.id.ProjectImage);
+            ImageView delete = projectView.findViewById(R.id.Delete);
+
             BitmapString bitmapString =  new BitmapString();
-            img.setImageBitmap(bitmapString.StringToBitMap(item.getArtBitmap()));
+            final Bitmap btm = bitmapString.StringToBitMap(item.getArtBitmap());
+            img.setImageBitmap(btm);
             projectName.setText(item.getNameProject());
             projectListLayout.addView(projectView);
+
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    savingSystem.deleteProject(index,SavedProjects.this);
+                    String name = item.getNameProject();
+                    loadProjects();
+                    Toast.makeText(SavedProjects.this,"" + name + " has been deleted!",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(SavedProjects.this);
+                    final View ArtShow = getLayoutInflater().inflate(R.layout.show_art, null);
+
+                    ImageView image =  ArtShow.findViewById(R.id.Image);
+                    mBuilder.setView(ArtShow);
+                    final AlertDialog dialog = mBuilder.create();
+                    image.setImageBitmap(btm);
+                    dialog.show();
+                }
+            });
 
             projectView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -97,6 +127,16 @@ public class SavedProjects extends AppCompatActivity {
                     startActivity(intent);
                     SavedProjects.this.overridePendingTransition(0,
                             R.anim.lefttoright);
+                }
+            });
+
+            projectView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+
+
+                    return false;
                 }
             });
 
