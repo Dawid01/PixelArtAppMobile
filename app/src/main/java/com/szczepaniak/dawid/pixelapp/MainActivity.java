@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     int projectIndex;
 
     FloatingActionButton projectsButton;
-
+    Singleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         projectsButton = findViewById(R.id.Back);
 
 
-
+        singleton = Singleton.getInstance();
 
         projectsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(bitmapString != null){
 
+            projectIsSaved = true;
+            projectIndex = singleton.getProjectIndex();
             BitmapString b = new BitmapString();
             Bitmap bitmap = b.StringToBitMap(bitmapString);
             dv.DrawNewBitmap(bitmap);
@@ -259,7 +261,21 @@ public class MainActivity extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateProject();
+                if(!projectIsSaved) {
+                    CreateProject();
+                }else {
+
+                    SavingSystem savingSystem =  new SavingSystem();
+                    BitmapString bitmapString =  new BitmapString();
+                    dv.showGrid = false;
+                    dv.invalidate();
+                    ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),singleton.getProjectName());
+                    dv.showGrid = true;
+                    dv.invalidate();
+                    savingSystem.saveProject(projectItem,singleton.getProjectIndex(), MainActivity.this);
+                    Toast.makeText(MainActivity.this,"" + singleton.getProjectName() + " has been saved!",Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -318,6 +334,8 @@ public class MainActivity extends AppCompatActivity {
                     dv.invalidate();
                     savingSystem.saveNewProject(projectItem, MainActivity.this);
                     dialog.dismiss();
+                    Toast.makeText(MainActivity.this,"" + name.getText() + " has been created!",Toast.LENGTH_SHORT).show();
+
 
                 }else {
 

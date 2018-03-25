@@ -34,6 +34,7 @@ public class SavedProjects extends AppCompatActivity {
     SavingSystem savingSystem;
     RelativeLayout layout;
     LinearLayout projectListLayout;
+    Singleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class SavedProjects extends AppCompatActivity {
         });
 
         loadProjects();
+        singleton = Singleton.getInstance();
     }
 
     @Override
@@ -124,6 +126,8 @@ public class SavedProjects extends AppCompatActivity {
 
                     Intent intent = new Intent(SavedProjects.this, MainActivity.class);
                     intent.putExtra("BitmapString", item.getArtBitmap());
+                    singleton.setProjectIndex(index);
+                    singleton.setProjectName(item.getNameProject());
                     startActivity(intent);
                     SavedProjects.this.overridePendingTransition(0,
                             R.anim.lefttoright);
