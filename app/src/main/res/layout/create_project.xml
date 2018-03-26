@@ -28,6 +28,7 @@
         android:ems="10"
         android:hint="Project name"
         android:inputType="textPersonName"
+        android:textAlignment="center"
         android:textColor="@android:color/background_light" />
 
     <Button
@@ -42,5 +43,6 @@
         android:fontFamily="monospace"
         android:text="Create"
         android:textColor="@android:color/background_light"
+        android:textSize="16sp"
         android:textStyle="bold" />
 </RelativeLayout>

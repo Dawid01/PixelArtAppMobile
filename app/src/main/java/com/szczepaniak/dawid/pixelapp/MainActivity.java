@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         singleton = Singleton.getInstance();
 
+        singleton.setMainActivity(this);
         projectsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!isZoom) {
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
-                            if (dv.zoomTouch && dv.styleDraw != 2) {
+                            if (singleton.isTouchZoom == true && dv.styleDraw != 2) {
                                 zoomCircle.setVisibility(View.VISIBLE);
                             }
                         case MotionEvent.ACTION_UP:
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         case MotionEvent.ACTION_POINTER_UP:
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if (dv.zoomTouch) {
+                            if (singleton.isTouchZoom == true) {
                                 circleZoomSystem((int) event.getX(), (int) event.getY());
                             }
                             break;
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
     void circleZoomSystem(int x, int y){
 
-        if (dv.zoomTouch) {
+        if (singleton.isTouchZoom == true) {
             try {
                 zoomCircle.setVisibility(View.VISIBLE);
                 zoomCircle.setX(x - (zoomCircle.getWidth() / 2));
@@ -230,8 +231,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void changeGrid(){
-        dv.showGrid = !dv.showGrid;
-        if(dv.showGrid){
+        if(singleton.isGrid == true){
             AlphaBG.setVisibility(View.GONE);
         }else {
             AlphaBG.setVisibility(View.VISIBLE);
@@ -240,114 +240,17 @@ public class MainActivity extends AppCompatActivity {
 
     void optionsPopUp(){
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-        final View options = getLayoutInflater().inflate(R.layout.options_layout, null);
-        final Button gridB = options.findViewById(R.id.Grid);
-        final Button zoomTB = options.findViewById(R.id.TouchZoom);
-        final Button Save = options.findViewById(R.id.Save);
-
-        zoomTB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(dv.zoomTouch){
-                    dv.zoomTouch = false;
-                }else {
-                    dv.zoomTouch = true;
-
-                }
-            }
-        });
-
-        Save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!projectIsSaved) {
-                    CreateProject();
-                }else {
-
-                    SavingSystem savingSystem =  new SavingSystem();
-                    BitmapString bitmapString =  new BitmapString();
-                    dv.showGrid = false;
-                    dv.invalidate();
-                    ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),singleton.getProjectName());
-                    dv.showGrid = true;
-                    dv.invalidate();
-                    savingSystem.saveProject(projectItem,singleton.getProjectIndex(), MainActivity.this);
-                    Toast.makeText(MainActivity.this,"" + singleton.getProjectName() + " has been saved!",Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        gridB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(dv.showGrid){
-                    dv.showGrid = false;
-                    AlphaBG.setVisibility(View.VISIBLE);
-                    dv.invalidate();
-                }else {
-                    dv.showGrid = true;
-                    AlphaBG.setVisibility(View.GONE);
-                    dv.invalidate();
-
-                }
-            }
-        });
-
-
-
-        mBuilder.setView(options);
-        final AlertDialog optionsDialog = mBuilder.create();
-
-        optionsDialog.show();
-    }
-
-    void CreateProject(){
-
-
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-        final View createProject = getLayoutInflater().inflate(R.layout.create_project, null);
-
-        final EditText name = createProject.findViewById(R.id.ProjectName);
-        Button create = createProject.findViewById(R.id.Create);
-        mBuilder.setView(createProject);
-        final AlertDialog dialog = mBuilder.create();
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String n = name.getText().toString();
-                int count = 0;
-
-                for( int i=0; i<n.length(); i++ ) {
-                    count++;
-                }
-                if(count <= 10){
-
-                    SavingSystem savingSystem =  new SavingSystem();
-                    BitmapString bitmapString =  new BitmapString();
-                    dv.showGrid = false;
-                    dv.invalidate();
-                    ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),name.getText().toString());
-                    dv.showGrid = true;
-                    dv.invalidate();
-                    savingSystem.saveNewProject(projectItem, MainActivity.this);
-                    dialog.dismiss();
-                    Toast.makeText(MainActivity.this,"" + name.getText() + " has been created!",Toast.LENGTH_SHORT).show();
-
-
-                }else {
-
-                    Toast.makeText(MainActivity.this,"Max 10 chars", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-        dialog.show();
+        singleton.setPorjectIsSaved(projectIsSaved);
+        singleton.setDrawView(dv);
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(intent);
+        MainActivity.this.overridePendingTransition(R.anim.righttoleft,
+                R.anim.stay);
 
     }
+
+
+
 
 }
 

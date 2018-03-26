@@ -12,6 +12,22 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="30dp"
+            android:clickable="true"
+            android:scaleX="-1"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:rippleColor="@color/colorAccent"
+            app:srcCompat="@mipmap/arrowback" />
+
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"

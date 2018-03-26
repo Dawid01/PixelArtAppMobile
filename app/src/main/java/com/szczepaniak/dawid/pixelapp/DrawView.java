@@ -41,10 +41,10 @@ public class DrawView extends View{
         private final Paint gridPaint = new Paint();
         int mColor = Color.GREEN;
 
-        boolean showGrid = true;
+       // boolean showGrid = true;
         boolean draw = true;
         boolean rubber = false;
-        boolean zoomTouch = true;
+       // boolean zoomTouch = true;
 
         int styleDraw;
 
@@ -61,6 +61,7 @@ public class DrawView extends View{
 
         boolean isNewBitmap;
         float viewScale;
+        Singleton singleton;
 
     Paint paint = new Paint();
 
@@ -80,6 +81,7 @@ public class DrawView extends View{
             Xpos = new ArrayList<>();
             Ypos = new ArrayList<>();
             savedDraws =  new ArrayList<>();
+            singleton  = Singleton.getInstance();
 
 
 
@@ -124,7 +126,7 @@ public class DrawView extends View{
                 canvas = can;
             }
 
-            if (showGrid) {
+            if (singleton.isGrid == true) {
                 int width = getMeasuredWidth();
                 int height = getMeasuredHeight();
                 for (int i = 1; i < resolution; i++) {
@@ -159,7 +161,7 @@ public class DrawView extends View{
 
             if(styleDraw != 2) {
                 Draw(x, y);
-                if (zoomTouch) {
+                if (singleton.isTouchZoom == true) {
                     circlePath.reset();
                     circlePath.reset();
                     //circlePath.addCircle(mX, mY - 100, 80, Path.Direction.CW);
@@ -281,7 +283,7 @@ public class DrawView extends View{
 //                    //fillPaint.setPathEffect(discretePathEffect);
 //                    mCanvas.drawPaint(fillPaint);
 
-                    showGrid = false;
+                    singleton.setGrid(false);
                     invalidate();
                     this.setDrawingCacheEnabled(true);
                     this.buildDrawingCache();
@@ -290,7 +292,7 @@ public class DrawView extends View{
                     //mCanvas.setBitmap(btm);
                     int pixel = btm.getPixel((int)touchX,(int)touchY);
                     int targetColor = Color.argb(Color.alpha(pixel),Color.red(pixel),Color.green(pixel),Color.blue(pixel));
-                    showGrid = true;
+                    singleton.setGrid(true);
                     invalidate();
                     mCanvas.drawBitmap(btm,0,0,null);
                     Point point = new Point((int)touchX, (int)touchY);
@@ -346,7 +348,7 @@ public class DrawView extends View{
 
         mCanvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
 
-        if (showGrid) {
+        if (singleton.isGrid == true) {
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
             for (int i = 1; i <resolution; i++) {
