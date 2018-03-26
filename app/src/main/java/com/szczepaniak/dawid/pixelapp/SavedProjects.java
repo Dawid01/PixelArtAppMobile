@@ -94,6 +94,7 @@ public class SavedProjects extends AppCompatActivity {
             projectListLayout.addView(projectView);
 
 
+
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,6 +148,9 @@ public class SavedProjects extends AppCompatActivity {
         }
 
     }
+
+
+
 
 
 

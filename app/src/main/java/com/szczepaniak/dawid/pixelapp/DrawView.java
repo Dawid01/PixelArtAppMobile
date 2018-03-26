@@ -13,7 +13,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -58,12 +60,14 @@ public class DrawView extends View{
         ArrayList<Canvas> savedDraws;
 
         boolean isNewBitmap;
+        float viewScale;
 
     Paint paint = new Paint();
 
         public DrawView(Context c,  AttributeSet attrs) {
             super(c, attrs);
             context= getContext();
+            mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
             mPath = new Path();
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
             circlePaint = new Paint();
@@ -76,6 +80,8 @@ public class DrawView extends View{
             Xpos = new ArrayList<>();
             Ypos = new ArrayList<>();
             savedDraws =  new ArrayList<>();
+
+
 
         }
 
@@ -90,6 +96,11 @@ public class DrawView extends View{
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
+
+          // canvas.save();
+           //canvas.scale(mScaleFactor, mScaleFactor);
+
+
             if(newBitmap!= null){
                 Paint paint = new Paint();
                 paint.setAntiAlias(true);
@@ -97,33 +108,36 @@ public class DrawView extends View{
                 paint.setDither(true);
                 canvas.drawBitmap(newBitmap,0,0,paint);
             }
-                canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-                Paint cr = new Paint();
-                cr.setColor(Color.BLACK);
-                cr.setStrokeWidth(2);
-                canvas.drawPath(circlePath, cr);
-                savedDraws.add(canvas);
+            canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+            Paint cr = new Paint();
+            cr.setColor(Color.BLACK);
+            cr.setStrokeWidth(2);
+            canvas.drawPath(circlePath, cr);
+            savedDraws.add(canvas);
 
 
 
-                if(isBackDraws){
+            if(isBackDraws){
 
-                    isBackDraws = false;
-                    Canvas can = savedDraws.get(savedDraws.size()-1);
-                    canvas = can;
+                isBackDraws = false;
+                Canvas can = savedDraws.get(savedDraws.size()-1);
+                canvas = can;
+            }
+
+            if (showGrid) {
+                int width = getMeasuredWidth();
+                int height = getMeasuredHeight();
+                for (int i = 1; i < resolution; i++) {
+                    canvas.drawLine(width * i / resolution, 0, width * i / resolution, height, gridPaint);
                 }
 
-                if (showGrid) {
-                    int width = getMeasuredWidth();
-                    int height = getMeasuredHeight();
-                    for (int i = 1; i < resolution; i++) {
-                        canvas.drawLine(width * i / resolution, 0, width * i / resolution, height, gridPaint);
-                    }
-
-                    for (int i = 1; i < resolution; i++) {
-                        canvas.drawLine(0, height * i / resolution, width, height * i / resolution, gridPaint);
-                    }
+                for (int i = 1; i < resolution; i++) {
+                    canvas.drawLine(0, height * i / resolution, width, height * i / resolution, gridPaint);
                 }
+            }
+
+            //canvas.restore();
+
 
         }
 
@@ -166,8 +180,17 @@ public class DrawView extends View{
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
+            mScaleDetector.onTouchEvent(event);
             float x = event.getX();
             float y = event.getY();
+            viewScale = mScaleFactor * this.getScaleX();
+            //viewScale = Math.max(viewScale,5f);
+           // viewScale = Math.min(viewScale, 1f);
+            if(isZoom && this.getScaleX() < 2f && this.getScaleX() >= 1f) {
+                this.setScaleX(viewScale);
+                this.setScaleY(viewScale);
+            }
+
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -241,6 +264,7 @@ public class DrawView extends View{
                     paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
                    // paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.OVERLAY));
                     mCanvas.drawPoint(posX, posY, paint);
+
                     break;
                 case 1:
                     Paint rubberPaint = paint;
@@ -344,5 +368,23 @@ public class DrawView extends View{
             invalidate();
 
         }
+    }
+
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.f;
+
+
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            return true;
+        }
+
     }
 }
