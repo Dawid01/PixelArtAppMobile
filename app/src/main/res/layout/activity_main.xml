@@ -51,6 +51,7 @@
                 android:layout_alignTop="@+id/BG">
 
             </com.szczepaniak.dawid.pixelapp.DrawView>
+
         </RelativeLayout>
 
 

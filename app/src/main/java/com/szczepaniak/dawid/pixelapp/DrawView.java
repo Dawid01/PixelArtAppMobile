@@ -101,14 +101,14 @@ public class DrawView extends View{
 
           // canvas.save();
            //canvas.scale(mScaleFactor, mScaleFactor);
+            Paint paintBitmap = new Paint();
 
 
             if(newBitmap!= null){
-                Paint paint = new Paint();
-                paint.setAntiAlias(true);
-                paint.setFilterBitmap(true);
-                paint.setDither(true);
-                canvas.drawBitmap(newBitmap,0,0,paint);
+                paintBitmap.setAntiAlias(true);
+                paintBitmap.setFilterBitmap(true);
+                paintBitmap.setDither(true);
+                canvas.drawBitmap(newBitmap,0,0,paintBitmap);
             }
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
             Paint cr = new Paint();
@@ -388,5 +388,10 @@ public class DrawView extends View{
             return true;
         }
 
+    }
+
+    public void drawBitmap(Bitmap btm){
+
+        mCanvas.drawBitmap(btm,0f,0f,new Paint());
     }
 }

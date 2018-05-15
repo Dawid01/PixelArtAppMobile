@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
             projectIndex = singleton.getProjectIndex();
             BitmapString b = new BitmapString();
             Bitmap bitmap = b.StringToBitMap(bitmapString);
-            dv.DrawNewBitmap(bitmap);
+           dv.DrawNewBitmap(bitmap);
+            //dv.drawBitmap(bitmap);
         }
 
 
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return false;
         }
+
     }
 
 

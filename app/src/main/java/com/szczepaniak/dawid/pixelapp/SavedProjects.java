@@ -14,6 +14,8 @@ import android.text.SpannableString;
 import android.text.style.TypefaceSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +37,8 @@ public class SavedProjects extends AppCompatActivity {
     RelativeLayout layout;
     LinearLayout projectListLayout;
     Singleton singleton;
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class SavedProjects extends AppCompatActivity {
         projectListLayout = findViewById(R.id.ProjectList);
         savingSystem =  new SavingSystem();
         projectItems =  new ArrayList<>();
+        mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,10 +119,27 @@ public class SavedProjects extends AppCompatActivity {
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(SavedProjects.this);
                     final View ArtShow = getLayoutInflater().inflate(R.layout.show_art, null);
 
-                    ImageView image =  ArtShow.findViewById(R.id.Image);
+                    final ImageView image =  ArtShow.findViewById(R.id.Image);
+                    RelativeLayout layout = ArtShow.findViewById(R.id.Layout);
                     mBuilder.setView(ArtShow);
                     final AlertDialog dialog = mBuilder.create();
                     image.setImageBitmap(btm);
+
+                    layout.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+
+                            mScaleDetector.onTouchEvent(event);
+                            float viewScale = mScaleFactor;
+                            image.setScaleX(viewScale);
+                            image.setScaleY(viewScale);
+
+
+
+                            return false;
+                        }
+                    });
+
                     dialog.show();
                 }
             });
@@ -151,6 +174,19 @@ public class SavedProjects extends AppCompatActivity {
 
 
 
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            return true;
+        }
+
+    }
 
 
 

@@ -72,6 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
                     BitmapString bitmapString =  new BitmapString();
                     singleton.setGrid(false);
                     dv.invalidate();
+                    dv.setDrawingCacheEnabled(true);
                     ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),singleton.getProjectName());
                     singleton.setGrid(true);
                     dv.invalidate();
@@ -112,6 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
                     BitmapString bitmapString =  new BitmapString();
                     singleton.setGrid(false);
                     dv.invalidate();
+                    dv.setDrawingCacheEnabled(true);
                     ProjectItem projectItem = new ProjectItem(bitmapString.BitMapToString(dv.getDrawingCache()),name.getText().toString());
                     singleton.setGrid(true);
                     dv.invalidate();
