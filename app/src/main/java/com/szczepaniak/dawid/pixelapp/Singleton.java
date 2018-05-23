@@ -15,6 +15,7 @@ public class Singleton {
     boolean isTouchZoom = false;
     boolean porjectIsSaved;
 
+
     MainActivity mainActivity;
 
     public static Singleton getInstance() {
