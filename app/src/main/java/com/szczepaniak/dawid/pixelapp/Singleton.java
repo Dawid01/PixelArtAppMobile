@@ -16,6 +16,7 @@ public class Singleton {
     boolean porjectIsSaved;
 
 
+
     MainActivity mainActivity;
 
     public static Singleton getInstance() {
